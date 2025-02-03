@@ -7,6 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
-    /** @use HasFactory<\Database\Factories\ClientFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'username',
+        'group_id',
+        'type',
+        'city',
+        'phone',
+        'email',
+        'register_date'
+    ];
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
 }
