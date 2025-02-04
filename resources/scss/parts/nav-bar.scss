@@ -1,0 +1,40 @@
+#nav-bar {
+    width: 100%;
+    background-color: lighten($primary-background-color, 50);
+    height: $nav-bar-height;
+    @include flex-row;
+    align-items: center;
+    justify-content: space-between;
+
+    .nav-section {
+        @include flex-row;
+        align-items: center;
+        justify-content: space-around;
+
+        > *{
+            margin: 0 8px;
+        }
+
+        img {
+            height: 24px;
+        }
+
+        .avatar {
+            height: 42px;
+            border-radius: 50%;
+        }
+
+        .logo{
+            height: 42px;
+            margin-right: 42px;
+            :last-child{
+                fill: $primary-color;
+            }
+        }
+    }
+
+    .nav-store{
+        max-width: $left-panel-width;
+        min-width: $left-panel-width;
+    }
+}

@@ -1,0 +1,80 @@
+@import "./parts/_variables.scss";
+@import "./parts/nav-bar.scss";
+
+
+body {
+    margin: 0;
+    font-family: $main-font;
+    font-size: $main-font-size;
+    font-weight: $main-font-weight;
+}
+
+.card {
+    background-color: $primary-background-color;
+    border-radius: 4px;
+    margin: $cards-margin 0 0 $cards-margin;
+    padding: 8px 4px;
+}
+
+#container {
+    width: var($main-container-width);
+    min-height: 100vh;
+    background-color: $secondary-background-color;
+}
+
+#main-container {
+    width: 100%;
+    min-height: calc(100vh - #{$nav-bar-height});
+    @include flex-row
+}
+
+#side-panel {
+    width: $left-panel-width;
+    min-height: 100%;
+    background-color: $primary-background-color;
+}
+
+#main-panel {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .clients-div{
+        @include flex-row;
+        div{
+            width: 20%;
+            height:120px;
+        }
+    }
+
+    .table-filter {
+        margin-right: $cards-margin;
+    }
+
+    .clients-table {
+        margin-right: $cards-margin;
+        padding: 0;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #333;
+            color: white;
+        }
+        tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+        tr:nth-child(even) {
+            background-color: #e0e0e0;
+        }
+        input[type="checkbox"] {
+            transform: scale(1.2);
+        }
+    }
+}
