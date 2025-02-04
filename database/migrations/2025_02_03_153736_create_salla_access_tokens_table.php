@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('salla_access_tokens', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('store_id')->constrained('stores')->onDelete('cascade');
+            $table->string('access_token');
+            $table->string('refresh_token');
+            $table->timestamp('expire_date');
+            $table->string('scope');
             $table->timestamps();
         });
     }
