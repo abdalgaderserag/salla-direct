@@ -22,7 +22,6 @@
 <body>
     <div id="container">
         <div id="nav-bar">
-
             <div class="nav-section">
                 <div>
                     <svg class="logo" width="277" height="47" viewBox="0 0 277 47" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -55,7 +54,6 @@
         </div>
         <div id="main-container">
             <div id="side-panel"></div>
-
                 @livewire('client.index')
         </div>
     </div>
