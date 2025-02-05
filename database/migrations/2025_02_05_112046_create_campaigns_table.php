@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('campaigns', function (Blueprint $table) {
             $table->id();
+            $table->text('name');
+            $table->timestamp('activated_at');
+            $table->integer('time_lapse')->unsigned();
+            $table->json('groups');
+            $table->integer('status')->unsigned();
             $table->timestamps();
         });
     }

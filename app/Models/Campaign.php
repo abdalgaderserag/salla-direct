@@ -17,4 +17,8 @@ class Campaign extends Model
         'groups',
         'status'
     ];
+
+    public function message() {
+        return $this->hasOne(Message::class);
+    }
 }

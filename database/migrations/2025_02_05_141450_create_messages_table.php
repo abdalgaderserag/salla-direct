@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
+            $table->integer('campaign_id')->unsigned();
+            $table->text('context');
+            $table->json('attachment');
             $table->timestamps();
         });
     }
