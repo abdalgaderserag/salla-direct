@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Salla\Store;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,16 +12,16 @@ class Client extends Model
 
     protected $fillable = [
         'username',
-        'group_id',
-        'type',
+        'store_id',
+        'groups',
+        'gender',
         'city',
         'phone',
         'email',
-        'register_date'
+        'update_date'
     ];
 
-    public function group()
-    {
-        return $this->belongsTo(Group::class);
+    public function store() {
+        return $this->belongsTo(Store::class);
     }
 }

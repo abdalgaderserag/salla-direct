@@ -9,7 +9,11 @@ class Group extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'store_id',
+        'group',
+        'name'
+    ];
 
     public function clients()
     {

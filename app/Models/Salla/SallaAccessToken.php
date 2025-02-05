@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SallaAccessToken extends Model
 {
-    protected $fillabel = [
+    protected $fillable = [
         'store_id',
         'name',
         'email',
