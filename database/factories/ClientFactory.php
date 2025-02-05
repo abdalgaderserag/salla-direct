@@ -18,7 +18,7 @@ class ClientFactory extends Factory
     {
         return [
             'username' => $this->faker->userName,
-            'type' => $this->faker->randomElement(['admin', 'user', 'moderator']),
+            'type' => $this->faker->randomElement(['male', 'female']),
             'city' => $this->faker->city,
             'phone' => $this->faker->phoneNumber,
             'email' => $this->faker->unique()->safeEmail,

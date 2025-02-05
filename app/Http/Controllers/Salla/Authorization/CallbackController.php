@@ -9,6 +9,7 @@ use App\Models\Group;
 use App\Models\Salla\SallaAccessToken;
 use App\Models\Salla\Store;
 use App\Models\User;
+use App\Salla;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Auth;
@@ -58,14 +59,9 @@ class CallbackController extends Controller
 
     private function createStore($response)
     {
+        $salla = new Salla($response['access_token']);
         $user = Auth::user();
-        $headers = [
-            'Accept' => 'application/json',
-            'Authorization' => 'bearer ' . $response['access_token']
-        ];
-
-        $response = Http::withHeaders($headers)->get(config('salla.urls.store-info'));
-        $storeData = $response->json();
+        $storeData = $salla->getData('store');
         $storeToken = [
             'user_id' => $user->id,
             'store_id' => $storeData['id'],
@@ -74,7 +70,7 @@ class CallbackController extends Controller
             'avatar' => $storeData['avatar'],
             'domain' => $storeData['domain'],
         ];
-        $store = new Store($storeData);
+        $store = new Store($storeToken);
         $store->save();
 
         // save store as active
@@ -92,18 +88,9 @@ class CallbackController extends Controller
         $salla_access_token = new SallaAccessToken($tokenData);
         $salla_access_token->save();
 
-        // add customers
+        // get and save customers
         // API call
-        $headers = [
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $response['access_token'],
-        ];
-
-        $response = Http::withHeaders($headers)
-            ->get('https://api.salla.dev/admin/v2/customers')
-            ->throw();
-
-        $clientsData = $response->json('data');
+        $clientsData = $salla->getData('customers');
 
         // loop the api data and create clients
         foreach ($clientsData as $apiClient) {
@@ -123,11 +110,7 @@ class CallbackController extends Controller
         }
 
         // create groups
-        $response = Http::withHeaders($headers)
-            ->get('https://api.salla.dev/admin/v2/customers/groups')
-            ->throw();
-
-        $groupsData = $response->json('data');
+        $groupsData = $salla->getData('groups');
 
         foreach ($groupsData as $apiGroup) {
             // Prepare data
