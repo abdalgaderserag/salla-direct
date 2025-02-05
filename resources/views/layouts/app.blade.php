@@ -56,7 +56,7 @@
         <div id="main-container">
             <div id="side-panel"></div>
 
-                @livewire('client.list-index')
+                @livewire('client.index')
         </div>
     </div>
     @livewireScripts

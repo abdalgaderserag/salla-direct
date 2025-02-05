@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Salla\Authorization;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Salla\Authorization\CallbackRequest;
+use App\Models\Client;
+use App\Models\Group;
 use App\Models\Salla\SallaAccessToken;
 use App\Models\Salla\Store;
 use App\Models\User;
@@ -56,6 +58,7 @@ class CallbackController extends Controller
 
     private function createStore($response)
     {
+        $user = Auth::user();
         $headers = [
             'Accept' => 'application/json',
             'Authorization' => 'bearer ' . $response['access_token']
@@ -64,7 +67,7 @@ class CallbackController extends Controller
         $response = Http::withHeaders($headers)->get(config('salla.urls.store-info'));
         $storeData = $response->json();
         $storeToken = [
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'store_id' => $storeData['id'],
             'name' => $storeData['name'],
             'email' => $storeData['email'],
@@ -73,6 +76,10 @@ class CallbackController extends Controller
         ];
         $store = new Store($storeData);
         $store->save();
+
+        // save store as active
+        $user->active_id = $store->id;
+        $user->save();
 
         //create token
         $tokenData = [
@@ -84,5 +91,52 @@ class CallbackController extends Controller
         ];
         $salla_access_token = new SallaAccessToken($tokenData);
         $salla_access_token->save();
+
+        // add customers
+        // API call
+        $headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $response['access_token'],
+        ];
+
+        $response = Http::withHeaders($headers)
+            ->get('https://api.salla.dev/admin/v2/customers')
+            ->throw();
+
+        $clientsData = $response->json('data');
+
+        // loop the api data and create clients
+        foreach ($clientsData as $apiClient) {
+            // Prepare data
+            $data = [
+                'username'       => $apiClient['first_name'] . ' ' . $apiClient['last_name'],
+                'client_id'      => $apiClient['id'],
+                'store_id'       => $user->active_id,
+                'groups'         => $apiClient['groups'] ?? [],
+                'gender'         => $apiClient['gender'] ?? null,
+                'city'           => $apiClient['city'] ?? null,
+                'phone'          => '+' . ($apiClient['mobile_code'] ?? '') . ' ' . ($apiClient['mobile'] ?? ''),
+                'email'          => $apiClient['email'],
+                'update_date'    => $apiClient['updated_at']['date'], // Use updated_at
+            ];
+            Client::create($data);
+        }
+
+        // create groups
+        $response = Http::withHeaders($headers)
+            ->get('https://api.salla.dev/admin/v2/customers/groups')
+            ->throw();
+
+        $groupsData = $response->json('data');
+
+        foreach ($groupsData as $apiGroup) {
+            // Prepare data
+            $data = [
+                'store_id' => $user->active_id,
+                'group' => $apiGroup['id'],
+                'name' => $apiGroup['name']
+            ];
+            Group::create($data);
+        }
     }
 }
