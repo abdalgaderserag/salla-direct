@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('store_id')->constrained()->onDelete('cascade');
+            $table->bigInteger('store_id')->unsigned();
             $table->integer('group')->unsigned();
             $table->string('name');
             $table->timestamps();

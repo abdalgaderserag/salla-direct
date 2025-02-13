@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('store_id')->constrained('stores')->onDelete('cascade');
+            $table->bigInteger('store_id');
             $table->string('username')->unique();
             $table->json('groups')->nullable();
             $table->string('type');
             $table->string('city');
             $table->string('phone');
             $table->string('email')->unique();
+            $table->boolean('isBanned')->default(false);
             $table->date('register_date');
             $table->timestamps();
         });

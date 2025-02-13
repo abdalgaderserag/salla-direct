@@ -18,7 +18,8 @@ class Client extends Model
         'city',
         'phone',
         'email',
-        'update_date'
+        'update_date',
+        'isBanned'
     ];
 
     public function store() {
