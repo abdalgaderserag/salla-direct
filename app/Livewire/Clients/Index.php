@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Livewire\Client\Client;
+namespace App\Livewire\Clients;
 
 use App\Models\Client;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Index extends Component
