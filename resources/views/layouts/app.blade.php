@@ -22,9 +22,10 @@
 <body>
     <div id="container" style="display: flex">
         @include('layouts.parts.side')
-        <div class="w-full">
+        <div class="w-full h-screen overflow-auto">
             @include('layouts.parts.nav')
             @section('main')
+            @livewire('clients.index')
         </div>
 
 
