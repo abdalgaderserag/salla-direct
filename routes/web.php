@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/salla/callback', [CallbackController::class, 'index'])->name('salla.redirect');
 
 Route::middleware([
     'auth:sanctum',
@@ -17,4 +18,3 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get('/salla/callback', [CallbackController::class, 'index'])->name('salla.redirect');

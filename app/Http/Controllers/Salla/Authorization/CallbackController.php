@@ -12,8 +12,10 @@ use App\Models\User;
 use App\Salla;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Response;
+use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Laravel\Fortify\Fortify;
 
 class CallbackController extends Controller
@@ -27,9 +29,9 @@ class CallbackController extends Controller
         $state = $request->query('state');
 
         // Validate the received parameters
-        if (!$code || !$scope || $state) {
-            return redirect()->away(config('salla.urls.auth'));
-        }
+        // if (!$code || !$scope || $state) {
+        //     return redirect()->away(config('salla.urls.auth'));
+        // }
 
         $scope_permissions = 'offline_access';
         $redirect_url = route('salla.redirect');
@@ -47,7 +49,10 @@ class CallbackController extends Controller
             'Content-Type' => 'application/x-www-form-urlencoded'
         ];
 
-        $response = Http::asForm()->withHeaders($headers)->post(config('salla.urls.token'), $formData);
+        $response = Http::asForm()
+            ->withHeaders($headers)
+            ->post('https://accounts.salla.sa/oauth2/token', $formData);
+        Log::info($response);
 
         if ($response->successful()) {
             $store = $this->createStore($response->json());
