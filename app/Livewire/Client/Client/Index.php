@@ -3,6 +3,7 @@
 namespace App\Livewire\Client\Client;
 
 use App\Models\Client;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Index extends Component

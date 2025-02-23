@@ -25,7 +25,7 @@
         <div class="w-full h-screen overflow-auto">
             @include('layouts.parts.nav')
             @section('main')
-            @livewire('clients.index')
+            @livewire('client.client.index')
         </div>
 
 
