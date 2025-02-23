@@ -9,10 +9,10 @@ class SallaAccessToken extends Model
 {
     protected $fillable = [
         'store_id',
-        'name',
-        'email',
-        'avatar',
-        'domain'
+        'access_token',
+        'refresh_token',
+        'expire_date',
+        'scope'
     ];
 
     public function store() {

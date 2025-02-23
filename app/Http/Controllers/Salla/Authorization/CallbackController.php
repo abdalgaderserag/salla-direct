@@ -8,21 +8,19 @@ use App\Models\Client;
 use App\Models\Group;
 use App\Models\Salla\SallaAccessToken;
 use App\Models\Salla\Store;
-use App\Models\User;
 use App\Salla;
 use Carbon\Carbon;
-use Illuminate\Http\Client\Response;
-use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Laravel\Fortify\Fortify;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\RequestException;
 
 class CallbackController extends Controller
 {
+
+
     public function index(CallbackRequest $request)
     {
-
         // Retrieve query parameters
         $code = $request->query('code');
         $scope = $request->query('scope');
@@ -49,14 +47,26 @@ class CallbackController extends Controller
             'Content-Type' => 'application/x-www-form-urlencoded'
         ];
 
-        $response = Http::asForm()
-            ->withHeaders($headers)
-            ->post('https://accounts.salla.sa/oauth2/token', $formData);
-        Log::info($response);
+        $client = new GuzzleClient();
 
-        if ($response->successful()) {
-            $store = $this->createStore($response->json());
-            return view('salla.callback');
+        try {
+            $response = $client->post('https://accounts.salla.sa/oauth2/token', [
+                'headers' => $headers,
+                'form_params' => $formData
+            ]);
+
+            $responseBody = json_decode($response->getBody(), true);
+            Log::info($responseBody);
+
+            if ($response->getStatusCode() === 200) {
+                $store = $this->createStore($responseBody);
+                return view('salla.callback');
+            }
+        } catch (RequestException $e) {
+            Log::error('Guzzle Request Exception: ' . $e->getMessage());
+            if ($e->hasResponse()) {
+                Log::error('Guzzle Response: ' . $e->getResponse()->getBody());
+            }
         }
 
         return abort(404);
@@ -67,6 +77,7 @@ class CallbackController extends Controller
         $salla = new Salla($response['access_token']);
         $user = Auth::user();
         $storeData = $salla->getData('store');
+        $storeData = $storeData['data'];
         $storeToken = [
             'user_id' => $user->id,
             'store_id' => $storeData['id'],
@@ -91,14 +102,16 @@ class CallbackController extends Controller
             'scope' => $response['scope']
         ];
         $salla_access_token = new SallaAccessToken($tokenData);
+
         $salla_access_token->save();
 
         // get and save customers
         // API call
         $clientsData = $salla->getData('customers');
 
+        Log::info($clientsData);
         // loop the api data and create clients
-        foreach ($clientsData as $apiClient) {
+        foreach ($clientsData['data'] as $apiClient) {
             // Prepare data
             $data = [
                 'username'       => $apiClient['first_name'] . ' ' . $apiClient['last_name'],
@@ -117,7 +130,7 @@ class CallbackController extends Controller
         // create groups
         $groupsData = $salla->getData('groups');
 
-        foreach ($groupsData as $apiGroup) {
+        foreach ($groupsData['data'] as $apiGroup) {
             // Prepare data
             $data = [
                 'store_id' => $user->active_id,

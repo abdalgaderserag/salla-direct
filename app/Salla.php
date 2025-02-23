@@ -3,18 +3,19 @@
 namespace App;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class Salla
 {
-
     protected $headers = [];
-
     protected $token;
+    protected $client;
 
     public function __construct($token = null)
     {
         $this->setHeaders($token);
+        $this->client = new Client();
     }
 
     public function getData($type)
@@ -31,23 +32,53 @@ class Salla
                 $url = 'https://api.salla.dev/admin/v2/customers/groups';
                 break;
             default:
-                # code...
-                break;
+                throw new \InvalidArgumentException("Invalid request type: $type");
         }
-        $response = Http::withHeaders($this->headers)->get($url)->throw();
-        return $response->json();
+
+        try {
+            $response = $this->client->request('GET', $url, [
+                'headers' => $this->headers,
+            ]);
+
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (RequestException $e) {
+            throw new \RuntimeException("Request failed: " . $e->getMessage());
+        }
+    }
+
+    public function sendData($type, $data)
+    {
+        $url = '';
+        switch ($type) {
+            case 'customers':
+                $url = 'https://api.salla.dev/admin/v2/customers';
+                break;
+            default:
+                throw new \InvalidArgumentException("Invalid request type: $type");
+        }
+
+        try {
+            $response = $this->client->request('POST', $url, [
+                'headers' => $this->headers,
+            ],$data);
+
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (RequestException $e) {
+            throw new \RuntimeException("Request failed: " . $e->getMessage());
+        }
     }
 
     protected function setHeaders($token)
     {
-        if (empty($token))
+        if (empty($token)) {
             $token = Auth::user()->sallaAccessToken->access_token;
+        }
 
-        $headers = [
+        $this->headers = [
             'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . $token,
         ];
         $this->token = $token;
-        $this->headers = $headers;
     }
 }

@@ -16,8 +16,8 @@ return new class extends Migration
             $table->bigInteger('store_id');
             $table->string('username')->unique();
             $table->json('groups')->nullable();
-            $table->string('type');
-            $table->string('city');
+            $table->string('gender');
+            $table->string('city')->nullable();
             $table->string('phone');
             $table->string('email')->unique();
             $table->boolean('isBanned')->default(false);
