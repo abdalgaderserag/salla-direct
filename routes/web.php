@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Salla\Authorization\CallbackController;
+use App\Http\Controllers\Salla\Test\CustomerController;
+use App\Http\Controllers\Salla\WebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,3 +20,6 @@ Route::middleware([
     })->name('dashboard');
 });
 
+Route::get('/test/client',[CustomerController::class, 'index']);
+
+Route::post('/webhook/salla', [WebhookController::class, 'handleWebhook']);

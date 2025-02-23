@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Support\Facades\Auth;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
 
 class Salla
 {
@@ -58,11 +59,9 @@ class Salla
         }
 
         try {
-            $response = $this->client->request('POST', $url, [
-                'headers' => $this->headers,
-            ],$data);
-
-            return json_decode($response->getBody()->getContents(), true);
+            $request = new Request('POST', $url, $this->headers, $data);
+            $res = $this->client->sendAsync($request)->wait();
+            return json_decode($res->getBody()->getContents(), true);
         } catch (RequestException $e) {
             throw new \RuntimeException("Request failed: " . $e->getMessage());
         }
