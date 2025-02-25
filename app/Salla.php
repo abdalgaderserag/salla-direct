@@ -23,6 +23,9 @@ class Salla
     {
         $url = '';
         switch ($type) {
+            case 'storeOwner':
+                $url = 'https://accounts.salla.sa/oauth2/user/info';
+                break;
             case 'store':
                 $url = 'https://api.salla.dev/admin/v2/store/info';
                 break;

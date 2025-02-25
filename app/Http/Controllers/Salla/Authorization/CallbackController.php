@@ -22,9 +22,13 @@ class CallbackController extends Controller
     public function index(CallbackRequest $request)
     {
         // Retrieve query parameters
-        $code = $request->query('code');
-        $scope = $request->query('scope');
-        $state = $request->query('state');
+        if(!Auth::check()){
+            session()->put('salla_callback_url', $request->fullUrl());
+            return redirect()->route('register');
+        }
+        session()->put('code', $request->query('code'));
+//        $scope = $request->query('scope');
+//        $state = $request->query('state');
 
         // Validate the received parameters
         // if (!$code || !$scope || $state) {
@@ -38,7 +42,7 @@ class CallbackController extends Controller
             'client_id' => config('salla.client.id'),
             'client_secret' => config('salla.client.secret'),
             'grant_type' => 'authorization_code',
-            'code' => $code,
+            'code' => session('code'),
             'scope' => $scope_permissions,
             'redirect_uri' => $redirect_url
         ];
@@ -56,10 +60,9 @@ class CallbackController extends Controller
             ]);
 
             $responseBody = json_decode($response->getBody(), true);
-            Log::info($responseBody);
 
             if ($response->getStatusCode() === 200) {
-                $store = $this->createStore($responseBody);
+                $this->createStore($responseBody);
                 return view('salla.callback');
             }
         } catch (RequestException $e) {
@@ -122,7 +125,7 @@ class CallbackController extends Controller
                 'city'           => $apiClient['city'] ?? null,
                 'phone'          => '+' . ($apiClient['mobile_code'] ?? '') . ' ' . ($apiClient['mobile'] ?? ''),
                 'email'          => $apiClient['email'],
-                'update_date'    => $apiClient['updated_at']['date'], // Use updated_at
+                'update_date'    => $apiClient['updated_at']['date'],
             ];
             Client::create($data);
         }
@@ -139,5 +142,12 @@ class CallbackController extends Controller
             ];
             Group::create($data);
         }
+    }
+
+    private function checkAuth()
+    {
+        if (Auth::user())
+            return true;
+        redirect()->route('register')->send();
     }
 }
