@@ -103,10 +103,10 @@
                                         <h2 class="text-sm font-normal text-emerald-500">Active</h2>
                                     </div>
                                 </td>
-                                <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap"><span class="font-medium text-gray-800">65</span> sec</td>
+                                <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap"><span class="font-medium text-gray-800 dark:text-white">65</span> sec</td>
                                 <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">yesterday</td>
-                                <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap"><span class="font-medium text-gray-800">5</span> days ago</td>
-                                <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap"><span class="font-medium text-gray-800">300</span> customer</td>
+                                <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap"><span class="font-medium text-gray-800 dark:text-white">5</span> days ago</td>
+                                <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap"><span class="font-medium text-gray-800 dark:text-white">300</span> customer</td>
                                 <td class="px-4 py-4 text-sm whitespace-nowrap">
                                     <div class="flex items-center gap-x-6">
 

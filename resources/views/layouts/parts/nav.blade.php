@@ -3,7 +3,8 @@
         <div class="lg:flex lg:items-center lg:justify-between">
             <div class="flex items-center justify-between">
                 <a href="#">
-                    <img class="w-auto h-6 sm:h-7" src="{{ asset('svg/logo.svg') }}" alt="">
+                    <img class="w-auto h-6 sm:h-7 dark:hidden" src="{{ asset('svg/logo.svg') }}" alt="">
+                    <img class="w-auto h-6 sm:h-7 hidden dark:block" src="{{ asset('svg/logo-dark.svg') }}" alt="">
                 </a>
 
                 <!-- Mobile menu button -->
