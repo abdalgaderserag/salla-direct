@@ -12,6 +12,7 @@ class Campaign extends Model
 
     protected $fillable = [
         'name',
+        'store_id',
         'activated_at',
         'time_lapse',
         'groups',

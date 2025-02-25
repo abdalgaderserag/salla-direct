@@ -19,7 +19,7 @@ class DashboardController extends Controller
 
     public function campaigns()
     {
-        return view('user.clients.banned');
+        return view('user.campaigns.index');
     }
 
     public function widget()
