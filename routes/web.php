@@ -3,6 +3,7 @@
 use App\Http\Controllers\Salla\Authorization\CallbackController;
 use App\Http\Controllers\Salla\Test\CustomerController;
 use App\Http\Controllers\Salla\WebhookController;
+use App\Http\Controllers\User\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,3 +24,9 @@ Route::middleware([
 Route::get('/test/client',[CustomerController::class, 'index']);
 
 Route::post('/webhook/salla', [WebhookController::class, 'handleWebhook']);
+
+Route::get('/clients', [DashboardController::class, 'clients'])->name('clients.index');
+Route::get('/clients/banned', [DashboardController::class, 'banned'])->name('clients.banned');
+
+Route::get('/campaigns', [DashboardController::class, 'campaigns'])->name('campaigns.index');
+Route::get('/widget', [DashboardController::class, 'widget'])->name('widget');

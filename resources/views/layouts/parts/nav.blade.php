@@ -41,7 +41,7 @@
                             <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" class="object-cover w-full h-full" alt="avatar">
                         </div>
 
-                        <h3 class="mx-2 text-gray-700 dark:text-gray-200">Ahmed Khalid</h3>
+                        <h3 class="mx-2 text-gray-700 dark:text-gray-200">{{ Auth::user()->name }}</h3>
                     </button>
                 </div>
             </div>

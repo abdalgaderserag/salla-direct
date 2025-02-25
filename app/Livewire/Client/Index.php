@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Client\Client;
+namespace App\Livewire\Client;
 
 use App\Models\Client;
 use Illuminate\Support\Facades\Auth;
@@ -11,8 +11,9 @@ class Index extends Component
     public $clients = [];
     public function render()
     {
-        $this->clients = Client::all()->where('store_id', '=', Auth::user()->active_id);
-
+        $this->clients = Client::all()->where('store_id', '=', Auth::user()->active_id)->filter(function($client){
+            return $client->isBanned;
+        });
         return view('livewire.client.index');
     }
 }

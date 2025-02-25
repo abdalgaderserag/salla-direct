@@ -24,8 +24,7 @@
         @include('layouts.parts.side')
         <div class="w-full h-screen overflow-auto">
             @include('layouts.parts.nav')
-            @section('main')
-            @livewire('client.client.index')
+            @yield('main')
         </div>
 
 
