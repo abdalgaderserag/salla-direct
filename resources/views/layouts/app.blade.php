@@ -22,13 +22,30 @@
 <body>
     <div id="container" style="display: flex">
         @include('layouts.parts.side')
-        <div class="w-full h-screen overflow-auto">
+        <div class="w-full h-screen overflow-auto dark:bg-gray-700">
             @include('layouts.parts.nav')
             @yield('main')
         </div>
-
-
     </div>
+    <script>
+        document.getElementById('darkModeToggle').addEventListener('click', function() {
+            document.documentElement.classList.toggle('dark');
+            document.getElementById('darkModeToggle').src = "{{ asset('svg/dark-mode.svg') }}";
+            // Save user preference in localStorage
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        });
+
+        // Check for saved user preference on page load
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // Fallback to system preference
+            document.documentElement.classList.add('dark');
+        }
+    </script>
     @livewireScripts
 </body>
 

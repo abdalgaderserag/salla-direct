@@ -26,4 +26,8 @@ class DashboardController extends Controller
     {
         return view('user.clients.banned');
     }
+
+    public function autoMessages() {
+        return view('user.auto');
+    }
 }

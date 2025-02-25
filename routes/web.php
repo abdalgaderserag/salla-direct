@@ -30,3 +30,5 @@ Route::get('/clients/banned', [DashboardController::class, 'banned'])->name('cli
 
 Route::get('/campaigns', [DashboardController::class, 'campaigns'])->name('campaigns.index');
 Route::get('/widget', [DashboardController::class, 'widget'])->name('widget');
+
+Route::get('/auto-messages', [DashboardController::class, 'autoMessages'])->name('auto');
