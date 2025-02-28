@@ -5,6 +5,8 @@ namespace App\Livewire\Client;
 use App\Models\Client;
 use App\Salla;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
@@ -80,9 +82,42 @@ class Index extends Component
 
     public function save()
     {
-        $salla = new Salla();
-        $res = $salla->sendData('create.customer',json_encode($this->requestData));
+        // $salla = new Salla();
+        $res = $this->createCustomer($this->requestData);
         dd($res);
         $this->removeClient();
+    }
+
+    public function createCustomer(array $customerData)
+    {
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . Auth::user()->sallaAccessToken->access_token,
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json'
+            ])->post('https://api.salla.dev/admin/v2/customers', [
+                'first_name' => $customerData['first_name'],
+                'last_name' => $customerData['last_name'],
+                'email' => $customerData['email'],
+                'mobile' => $customerData['phone'],
+                'gender' => $customerData['gender'],
+                'birthday' => $customerData['birthday'],
+                'notes' => 'Created via Laravel Integration'
+            ]);
+
+            if ($response->failed()) {
+                Log::error('Salla API Error', [
+                    'status' => $response->status(),
+                    'response' => $response->json()
+                ]);
+                throw new \Exception('Failed to create Salla customer: '.$response->body());
+            }
+
+            return $response->json('data');
+
+        } catch (\Exception $e) {
+            Log::error('Salla Service Error: '.$e->getMessage());
+            throw $e;
+        }
     }
 }

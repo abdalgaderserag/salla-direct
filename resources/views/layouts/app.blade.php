@@ -21,7 +21,9 @@
 
 <body>
     <div id="container" style="display: flex">
-        @include('layouts.parts.side')
+        @livewire('layout.side')
+
+
         <div class="w-full h-screen overflow-auto dark:bg-gray-700">
             @include('layouts.parts.nav')
             @yield('main')
@@ -47,7 +49,6 @@
         }
     </script>
     @livewireScripts
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
 </body>
 
 </html>

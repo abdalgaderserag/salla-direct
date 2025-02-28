@@ -1,14 +1,14 @@
 <aside class="flex">
     <div class="flex flex-col items-center w-16 h-screen py-8 bg-blue-600 dark:bg-gray-900 dark:border-gray-700">
         <div class="flex flex-col items-center flex-1 space-y-8 ">
-            <div class="border-2 border-white rounded-full">
+            <div class="border-4  border-white rounded-full cursor-pointer" wire:click="addStore">
                 <svg class="w-6 h-6 m-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="white" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/></svg>
             </div>
 
             @foreach (Auth::user()->stores as $store)
-                <a href="#" class="p-2 bg-white rounded-full">
+                <div href="#" class="p-2 bg-white rounded-full cursor-pointer" wire:click="changeStore({{ $store->id }})">
                     <img class="w-8 h-8" src="{{ $store->avatar }}" alt="{{ $store->name }}">
-                </a>
+                </div>
             @endforeach
         </div>
     </div>
