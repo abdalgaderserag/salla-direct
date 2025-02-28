@@ -9,7 +9,8 @@
                     clients</span>
             </div>
 
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">These are all the customers that are aligable to send campaigns to.</p>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">These are all the customers that are aligable to
+                send campaigns to.</p>
         </div>
 
         <div class="flex items-center mt-4 gap-x-3">
@@ -39,11 +40,83 @@
                         d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
 
-                <span>Add customer</span>
+                <span wire:click="addClient">Add customer</span>
             </button>
         </div>
     </div>
+    @if ($showClientWindow)
+        <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+            wire:click="removeClient">
 
+
+
+
+
+
+
+
+
+
+
+            <section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800" @click.stop>
+                <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white">Account settings</h2>
+
+                <form wire:submit.prevent="save">
+                    <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+                        <div>
+                            <label class="text-gray-700 dark:text-gray-200" for="first_name">First Name</label>
+                            <input id="first_name" type="text" wire:model="requestData.first_name"
+                                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                        </div>
+
+                        <div>
+                            <label class="text-gray-700 dark:text-gray-200" for="last_name">Last Name</label>
+                            <input id="last_name" type="text" wire:model="requestData.last_name"
+                                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                        </div>
+
+                        <div>
+                            <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Email Address</label>
+                            <input id="emailAddress" type="email" wire:model="requestData.email"
+                                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                        </div>
+
+                        <div>
+                            <label for="Birthday" class="block text-sm text-gray-500 dark:text-gray-300">Birthday</label>
+                            <input type="date" wire:model="requestData.birthday"
+                                class="block mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        </div>
+
+                        <div>
+                            <label for="gender" class="block text-sm text-gray-500 dark:text-gray-300">Gender</label>
+                            <select id="gender" wire:model="requestData.gender"
+                                class="block mt-2 w-full rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
+                                <option value="">Select Counter Code</option>
+                                <option value="male">+249</option>
+                                <option value="female">+80</option>
+                                <option value="other">+1</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="text-gray-700 dark:text-gray-200" for="phone">Phone Number</label>
+                            <input id="phone" type="tel" wire:model="requestData.phone"
+                                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end mt-6">
+                        <button class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">Save</button>
+                    </div>
+                </form>
+            </section>
+
+
+
+
+
+        </div>
+    @endif
     <div class="mt-6 md:flex md:items-center md:justify-between">
         <div
             class="inline-flex overflow-hidden bg-white border divide-x rounded-lg dark:bg-gray-900 rtl:flex-row-reverse dark:border-gray-700 dark:divide-gray-700">
@@ -83,8 +156,8 @@
                             <tr>
                                 <th scope="col"
                                     class="py-3.5 px-2 w-10 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <input type="checkbox"
-                                        class="form-checkbox h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                    {{-- <input wire:click="selectAll" wire:model="select_list_input" type="checkbox"
+                                        class="form-checkbox h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"> --}}
                                 </th>
                                 <th scope="col"
                                     class="py-3.5 px-4 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -104,7 +177,8 @@
                                 <th scope="col"
                                     class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     Register at</th>
-                                <th scope="col" class="relative py-3.5 px-4 w-1/6"><span class="sr-only">Edit</span>
+                                <th scope="col" class="relative py-3.5 px-4 w-1/6"><span
+                                        class="sr-only">Edit</span>
                                 </th>
                             </tr>
                         </thead>
@@ -112,7 +186,8 @@
                             @forelse ($clients as $client)
                                 <tr>
                                     <td class="px-2 py-4 text-sm font-medium whitespace-nowrap">
-                                        <input type="checkbox"
+                                        <input wire:click="toggleClient({{ $client->id }})" type="checkbox"
+                                            {{ in_array($client->id, $selectedClientIds) ? 'checked' : '' }}
                                             class="form-checkbox h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                     </td>
                                     <td
@@ -146,7 +221,6 @@
                                     </td>
                                 </tr>
                             @empty
-
                             @endforelse
                         </tbody>
                     </table>

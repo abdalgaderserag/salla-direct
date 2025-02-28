@@ -54,7 +54,7 @@ class Salla
     {
         $url = '';
         switch ($type) {
-            case 'customers':
+            case 'create.customer':
                 $url = 'https://api.salla.dev/admin/v2/customers';
                 break;
             default:
