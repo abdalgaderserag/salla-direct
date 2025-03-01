@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Salla;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendWhatsappMessage;
 use App\Models\Auto;
 use App\Models\Client;
 use App\Models\Message;
@@ -101,19 +102,17 @@ class WebhookController extends Controller
         $autos = Auto::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event);
         switch ($data['status']) {
             case 'rating':
-                # code...
+                $auto = $autos->where('type','=','rating')->first();
                 break;
             case 'order completed':
                 # code...
+                $auto = $autos->where('type','=','order-completed')->first();
                 break;
             case 'refunding order':
-                # code...
-                break;
-
-            default:
-                # code...
+                $auto = $autos->where('type','=','refunding-order')->first();
                 break;
         }
+        $this->fireMessage($auto->message, $data['customer_id']);
     }
 
     private function handleOrderPayment($data, $event)
@@ -121,22 +120,18 @@ class WebhookController extends Controller
         $autos = Auto::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event);
         switch ($data['status']) {
             case 'payment on arrival confirmation':
-                # code...
+                $auto = $autos->where('type','=','payment-arrival')->first();
                 break;
             case 'order is waiting for payment':
-                # code...
-                break;
-
-            default:
-                # code...
+                $auto = $autos->where('type','=','payment-waiting')->first();
                 break;
         }
+        $this->fireMessage($auto->message, $data['customer_id']);
     }
 
     private function fireMessage(Message $message, $customer_id)
     {
         $client = Client::where('salla_id', '=', $customer_id)->first();
-        // fire sendWhatsappMessage event
-
+        new SendWhatsappMessage($message, $client->phone);
     }
 }
