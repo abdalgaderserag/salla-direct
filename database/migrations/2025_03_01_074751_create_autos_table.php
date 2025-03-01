@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('message_id')->constrained()->onDelete('cascade');
             $table->integer('store_id',false,true);
+            $table->boolean('active')->default(false);
+            $table->string('type')->nullable();
             $table->string('event');
             $table->timestamps();
         });

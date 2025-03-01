@@ -87,4 +87,8 @@ class User extends Authenticatable
             'id'                     // Local key on the intermediate model (Store)
         );
     }
+
+    public function plans() {
+        return $this->hasMany(Plan::class);
+    }
 }

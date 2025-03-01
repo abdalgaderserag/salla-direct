@@ -143,11 +143,4 @@ class CallbackController extends Controller
             Group::create($data);
         }
     }
-
-    private function checkAuth()
-    {
-        if (Auth::user())
-            return true;
-        redirect()->route('register')->send();
-    }
 }

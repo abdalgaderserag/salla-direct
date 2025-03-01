@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('messages', function (Blueprint $table) {
+        Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->integer('campaign_id')->unsigned()->nullable();
-            $table->text('context')->nullable();
-            $table->json('attachment')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->integer('messages_count',false,true);
+            $table->float('price');
+            $table->string('curr');
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('messages');
+        Schema::dropIfExists('plans');
     }
 };
