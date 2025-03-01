@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Salla;
 
 use App\Http\Controllers\Controller;
 use App\Models\Client;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -29,21 +30,28 @@ class WebhookController extends Controller
         $data = $request->input('data');
 
         switch ($event) {
+
+            case 'abandoned.cart':
+            case 'customer.created':
+            case 'customer.login':
+            case 'order.created':
+            case 'order.refunded':
+            case 'order.cancelled':
+            case 'shipment.created':
+            case 'shipment.completed':
+            case 'shipment.updated':
+                $this->handleSoloEvent($data, $event);
+                break;
+
+            case 'order.updated':
+                $this->handleOrderUpdated($data, $event);
+                break;
+            case 'order.payment.updated':
+                $this->handleOrderPayment($data, $event);
+
+
             case 'user.update':
-            case 'user.create':
                 $this->handleUserUpdated($data);
-                break;
-
-            case 'product.created':
-                $this->handleProductCreated($data);
-                break;
-
-            case 'product.updated':
-                $this->handleProductUpdated($data);
-                break;
-
-            case 'product.deleted':
-                $this->handleProductDeleted($data);
                 break;
 
             default:
@@ -65,33 +73,6 @@ class WebhookController extends Controller
         return hash_equals($signature, $computedSignature);
     }
 
-    /**
-     * Handle product created event.
-     */
-    private function handleProductCreated($data)
-    {
-        Log::info('New product created:', $data);
-        // Save product to database or perform other actions
-    }
-
-    /**
-     * Handle product updated event.
-     */
-    private function handleProductUpdated($data)
-    {
-        Log::info('Product updated:', $data);
-        // Update product in database
-    }
-
-    /**
-     * Handle product deleted event.
-     */
-    private function handleProductDeleted($data)
-    {
-        Log::info('Product deleted:', $data);
-        // Remove product from database
-    }
-
     private function handleUserUpdated($data)
     {
         $user = Client::updateOrCreate(
@@ -106,5 +87,55 @@ class WebhookController extends Controller
                 'register_date' => $data['register_date']
             ]
         );
+    }
+
+    private function handleSoloEvent($data, $event)
+    {
+        $auto = Client::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event)->first();
+        $this->fireMessage($auto->message, $data['customer_id']);
+    }
+
+    private function handleOrderUpdated($data, $event)
+    {
+        $autos = Client::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event);
+        switch ($data['status']) {
+            case 'rating':
+                # code...
+                break;
+            case 'order completed':
+                # code...
+                break;
+            case 'refunding order':
+                # code...
+                break;
+
+            default:
+                # code...
+                break;
+        }
+    }
+
+    private function handleOrderPayment($data, $event)
+    {
+        $autos = Client::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event);
+        switch ($data['status']) {
+            case 'payment on arrival confirmation':
+                # code...
+                break;
+            case 'order is waiting for payment':
+                # code...
+                break;
+
+            default:
+                # code...
+                break;
+        }
+    }
+
+    private function fireMessage(Message $message, $customer_id)
+    {
+        $client = Client::where('salla_id', '=', $customer_id)->first();
+        // fire sendWhatsappMessage event
+
     }
 }
