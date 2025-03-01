@@ -4,6 +4,7 @@ return [
     'client' =>[
         'id' => $id,
         'secret' => '126de0910f9965382af6b7e4c7492570',
+        'webhook_secret' => ''
     ],
 
     'urls' => [

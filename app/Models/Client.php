@@ -11,14 +11,15 @@ class Client extends Model
     use HasFactory;
 
     protected $fillable = [
-        'username',
         'store_id',
+        'salla_id',
+        'username',
         'groups',
         'gender',
         'city',
         'phone',
         'email',
-        'update_date',
+        'register_date',
         'isBanned'
     ];
 
