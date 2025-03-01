@@ -48,18 +48,20 @@
     @endif
 
     <div class="mt-6">
-        @foreach (config('salla.events') as $event)
+        <?php $events = config('salla.events')?>
+        @for ($i = 0;$i<count($events);$i++)
+        <?php $event = $events[$i];?>
         <div class="w-full px-8 py-4 bg-white border mb-1 rounded-lg dark:bg-gray-800 dark:border-gray-700">
             <div class="flex items-center justify-between">
                 <div>
                     <span
                         class="text-xl cursor-pointer font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200"
-                        wire:click="showEventWindow('{{ $event }}')">{{ $event['title'] }}</span>
+                        wire:click="showEventWindow('{{ json_encode($event) }}')">{{ $event['title'] }}</span>
                     <span
                         class="px-3 py-1 mx-4 text-xs text-green-600 bg-green-100 rounded-full dark:bg-gray-800 dark:text-green-400">Active</span>
                 </div>
                 <div class="flex">
-                    <div wire:click="active('{{ $event }}')"
+                    <div wire:click="active('{{ json_encode($event) }}')"
                         class="relative w-10 h-5 transition duration-200 ease-linear rounded-full cursor-pointer bg-gray-300 dark:bg-gray-700">
                         <label for="active"
                             class="absolute left-0 w-5 h-5 mb-2 transition duration-100 ease-linear transform bg-white border-2 rounded-full cursor-pointer dark:bg-gray-100 translate-x-0 border-gray-300 dark:border-gray-700"></label><input
@@ -72,6 +74,6 @@
                 <p class="mt-2 text-gray-600 dark:text-gray-300">{{ $event['description'] }}</p>
             </div>
         </div>
-        @endforeach
+        @endfor
     </div>
 </section>
