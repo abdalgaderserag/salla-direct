@@ -22,6 +22,11 @@ class DashboardController extends Controller
         return view('user.campaigns.index');
     }
 
+    public function campaign()
+    {
+        return view('user.campaigns.create');
+    }
+
     public function widget()
     {
         return view('user.clients.banned');
