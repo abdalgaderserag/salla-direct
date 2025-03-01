@@ -29,7 +29,7 @@ class CustomerController extends Controller
             "birthday" => $faker->date("Y-m-d", "-18 years"),
             "email" => $faker->safeEmail,
         ];
-        $response = $salla->sendData('CreateCustomer', json_encode($data));
+        $response = $salla->sendData('create.customer', json_encode($data));
         return $response;
     }
 

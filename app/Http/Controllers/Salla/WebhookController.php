@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Salla;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auto;
 use App\Models\Client;
 use App\Models\Message;
 use Illuminate\Http\Request;
@@ -91,13 +92,13 @@ class WebhookController extends Controller
 
     private function handleSoloEvent($data, $event)
     {
-        $auto = Client::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event)->first();
+        $auto = Auto::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event)->first();
         $this->fireMessage($auto->message, $data['customer_id']);
     }
 
     private function handleOrderUpdated($data, $event)
     {
-        $autos = Client::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event);
+        $autos = Auto::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event);
         switch ($data['status']) {
             case 'rating':
                 # code...
@@ -117,7 +118,7 @@ class WebhookController extends Controller
 
     private function handleOrderPayment($data, $event)
     {
-        $autos = Client::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event);
+        $autos = Auto::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event);
         switch ($data['status']) {
             case 'payment on arrival confirmation':
                 # code...
