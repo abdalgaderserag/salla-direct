@@ -20,7 +20,7 @@ class Index extends Component
     use WithPagination;
     public $selectedClientIds = [];
     public $select_list_input = false, $showClientWindow = false, $campForm = false;
-    public $group = '',$search = '';
+    public $group = '', $search = '', $sort = 'username', $sortDir = 'ASC';
     public $requestData = [
         'first_name' => '',
         'last_name' => '',
@@ -36,17 +36,18 @@ class Index extends Component
     ];
 
     #[Computed()]
-    public function clients(){
+    public function clients()
+    {
         // todo : search how to search in json
         $clients = Client::where('store_id', Auth::user()->active_id)
-                ->where('isBanned', 0);
+            ->where('isBanned', 0);
         if ($this->group != '') {
             $clients = $clients->where('groups', $this->group);
         }
         if ($this->search != '') {
-            $clients = $clients->where('username', 'like', "%{$this->search}%");
+            $clients = $clients->where('username', 'like', "%{$this->search}%")->orWhere('phone', 'like', "%{$this->search}%");
         }
-        return $clients->paginate(10);
+        return $clients->orderBy($this->sort, $this->sortDir)->paginate(10);
     }
     public function render()
     {
@@ -55,6 +56,14 @@ class Index extends Component
         return view('livewire.client.index', [
             'groups' => $groups,
         ]);
+    }
+
+    public function sortBy($type)
+    {
+        if ($this->sort == $type) {
+            $this->sortDir = $this->sortDir == 'DESC' ? 'ASC' : 'DESC';
+        }
+        $this->sort = $type;
     }
 
     public function selectAll()

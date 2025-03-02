@@ -143,7 +143,7 @@
             <section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800" @click.stop>
                 <span class="text-lg font-semibold text-gray-700 capitalize dark:text-white">Create Campaign</span>
                 <span
-                    class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{{ count(Session::get('selected_clients',[])) }}
+                    class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{{ count(Session::get('selected_clients', [])) }}
                     customer selected</span>
 
                 <form wire:submit.prevent="save">
@@ -198,9 +198,8 @@
                 class="block mt-2 pr-8 w-full rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
                 <option value="">All Customers</option>
                 @forelse ($groups as $g)
-                <option value="{{$g->group}}">{{ $g->name }}</option>
+                    <option value="{{ $g->group }}">{{ $g->name }}</option>
                 @empty
-
                 @endforelse
             </select>
         </div>
@@ -231,22 +230,35 @@
                             <tr>
                                 <th scope="col"
                                     class="py-3.5 px-4 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <button class="flex items-center gap-x-3 focus:outline-none">
+                                    <button wire:click="sortBy('username')"
+                                        class="flex items-center gap-x-3 focus:outline-none">
                                         <span>Name</span>
+                                        {{-- todo : replace with svg --}}
+                                        @if ($sort !== 'username')
+                                            <>
+                                            @elseif ($sortDir === 'ASC')
+                                                ^
+                                            @else
+                                                &
+                                        @endif
                                     </button>
                                 </th>
                                 <th scope="col"
-                                    class="px-12 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    Groups</th>
+                                    class="px-12 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
+                                    <span wire:click="sortBy('groups')">Groups</span>
+                                </th>
                                 <th scope="col"
-                                    class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    Info</th>
+                                    class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
+                                    <span wire:click="sortBy('email')">Info</span>
+                                </th>
                                 <th scope="col"
-                                    class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    City</th>
+                                    class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
+                                    <span wire:click="sortBy('city')">City</span>
+                                </th>
                                 <th scope="col"
-                                    class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    Register at</th>
+                                    class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
+                                    <span wire:click="sortBy('register_date')">Register at</span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
