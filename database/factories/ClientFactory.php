@@ -18,11 +18,15 @@ class ClientFactory extends Factory
     {
         return [
             'username' => $this->faker->userName,
-            'type' => $this->faker->randomElement(['male', 'female']),
+            'gender' => $this->faker->randomElement(['male', 'female']),
             'city' => $this->faker->city,
             'phone' => $this->faker->phoneNumber,
             'email' => $this->faker->unique()->safeEmail,
             'register_date' => $this->faker->dateTimeBetween('-5 years', 'now'),
+            'store_id' => 1,
+            'groups' => '[1111]',
+            'salla_id' => random_int(0,1999),
+            'isBanned' => false
         ];
     }
 }

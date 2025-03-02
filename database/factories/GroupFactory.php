@@ -17,7 +17,12 @@ class GroupFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->company()
+            'name' => $this->faker->unique()->company(),
+            'store_id' =>1,
+            'group' => 1111,
+            'clients' => json_encode([
+                1,2,3,4,5,6
+            ]),
         ];
     }
 }

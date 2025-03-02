@@ -26,4 +26,9 @@ class Client extends Model
     public function store() {
         return $this->belongsTo(Store::class);
     }
+
+    public function getGroupsAttribute($value)
+    {
+        return json_decode($value);
+    }
 }

@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\Client;
 use App\Models\Group;
+use App\Models\Salla\Store;
 use App\Models\User;
+use Exception;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,17 +19,21 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        try{
+            $u = User::factory()->create([
+                'name' => 'Test User',
+                'email' => 'test@gmail.com',
+                'active_id' => 1
+            ]);
+        }catch(Exception $e){
+        }
+
+        Store::factory(1)->create([
+            'user_id' => $u->id,
         ]);
 
-        $groups = Group::factory()->count(5)->create();
+        Group::factory()->create();
 
-        $groups->each(function ($group) {
-            Client::factory()->count(10)->create([
-                'group_id' => $group->id,
-            ]);
-        });
+        Client::factory()->count(20)->create();
     }
 }

@@ -22,13 +22,13 @@ class CallbackController extends Controller
     public function index(CallbackRequest $request)
     {
         // Retrieve query parameters
-        if(!Auth::check()){
+        if (!Auth::check()) {
             session()->put('salla_callback_url', $request->fullUrl());
             return redirect()->route('register');
         }
         session()->put('code', $request->query('code'));
-//        $scope = $request->query('scope');
-//        $state = $request->query('state');
+        //        $scope = $request->query('scope');
+        //        $state = $request->query('state');
 
         // Validate the received parameters
         // if (!$code || !$scope || $state) {
@@ -114,20 +114,39 @@ class CallbackController extends Controller
 
         Log::info($clientsData);
         // loop the api data and create clients
+        $allGroups = Group::where('store_id', $store->id);
         foreach ($clientsData['data'] as $apiClient) {
+            $groups = $apiClient['groups'] ?? [];
             // Prepare data
             $data = [
                 'username'       => $apiClient['first_name'] . ' ' . $apiClient['last_name'],
                 'client_id'      => $apiClient['id'],
                 'store_id'       => $user->active_id,
-                'groups'         => $apiClient['groups'] ?? [],
+                'groups'         => $groups,
                 'gender'         => $apiClient['gender'] ?? null,
                 'city'           => $apiClient['city'] ?? null,
                 'phone'          => '+' . ($apiClient['mobile_code'] ?? '') . ' ' . ($apiClient['mobile'] ?? ''),
                 'email'          => $apiClient['email'],
                 'update_date'    => $apiClient['updated_at']['date'],
             ];
-            Client::create($data);
+
+            $cli = Client::create($data);
+
+            // todo : check $group
+            foreach ($groups as $group) {
+                $g = $allGroups->where('group', $group)->first();
+                if (empty($g)) {
+                    $g = new Group();
+                    $g->store_id = $store->id;
+                    $g->group = $group;
+                    $g->clients = [$cli->id];
+                    $g->name = $group;
+                    $g->save();
+                } else {
+                    $g->clients = array_push($g->clients, $cli->id);
+                    $g->update();
+                }
+            }
         }
 
         // create groups

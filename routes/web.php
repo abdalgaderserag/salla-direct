@@ -19,17 +19,19 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+
+
+    Route::get('/test/client', [CustomerController::class, 'index']);
+
+    Route::post('/webhook/salla', [WebhookController::class, 'handleWebhook']);
+
+    Route::get('/clients', [DashboardController::class, 'clients'])->name('clients.index');
+    Route::get('/clients/banned', [DashboardController::class, 'banned'])->name('clients.banned');
+
+    Route::get('/campaigns', [DashboardController::class, 'campaigns'])->name('campaigns.index');
+    Route::get('/campaign/create', [DashboardController::class, 'campaign'])->name('campaigns.create');
+    Route::get('/widget', [DashboardController::class, 'widget'])->name('widget');
+
+    Route::get('/auto-messages', [DashboardController::class, 'autoMessages'])->name('auto');
 });
-
-Route::get('/test/client',[CustomerController::class, 'index']);
-
-Route::post('/webhook/salla', [WebhookController::class, 'handleWebhook']);
-
-Route::get('/clients', [DashboardController::class, 'clients'])->name('clients.index');
-Route::get('/clients/banned', [DashboardController::class, 'banned'])->name('clients.banned');
-
-Route::get('/campaigns', [DashboardController::class, 'campaigns'])->name('campaigns.index');
-Route::get('/campaign/create', [DashboardController::class, 'campaign'])->name('campaigns.create');
-Route::get('/widget', [DashboardController::class, 'widget'])->name('widget');
-
-Route::get('/auto-messages', [DashboardController::class, 'autoMessages'])->name('auto');

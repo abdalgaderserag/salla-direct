@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Salla\Store;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,8 +14,9 @@ return new class extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('store_id')->unsigned();
+            $table->foreignIdFor(Store::class);
             $table->integer('group')->unsigned();
+            $table->json('clients');
             $table->string('name');
             $table->timestamps();
         });

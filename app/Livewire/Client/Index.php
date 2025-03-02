@@ -2,18 +2,25 @@
 
 namespace App\Livewire\Client;
 
+use App\Models\Campaign;
 use App\Models\Client;
+use App\Models\Group;
 use App\Salla;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Index extends Component
 {
-    public $clients = [], $selectedClientIds = [];
-    public $select_list_input = false, $showClientWindow = false;
+    use WithPagination;
+    public $selectedClientIds = [];
+    public $select_list_input = false, $showClientWindow = false, $campForm = false;
+    public $group = '',$search = '';
     public $requestData = [
         'first_name' => '',
         'last_name' => '',
@@ -23,16 +30,31 @@ class Index extends Component
         'phone' => ''
     ];
 
+    public $campData = [
+        'name' => '',
+        'time' => '',
+    ];
+
+    #[Computed()]
+    public function clients(){
+        // todo : search how to search in json
+        $clients = Client::where('store_id', Auth::user()->active_id)
+                ->where('isBanned', 0);
+        if ($this->group != '') {
+            $clients = $clients->where('groups', $this->group);
+        }
+        if ($this->search != '') {
+            $clients = $clients->where('username', 'like', "%{$this->search}%");
+        }
+        return $clients->paginate(10);
+    }
     public function render()
     {
         $this->selectedClientIds = Session::get('selected_clients', []);
-        $this->clients = Client::where('store_id', Auth::user()->active_id)
-            ->get()
-            ->reject(function ($client) {
-                return $client->isBanned; // Filter out banned clients
-            });
-
-        return view('livewire.client.index');
+        $groups = Group::where('store_id', Auth::user()->active_id)->get();
+        return view('livewire.client.index', [
+            'groups' => $groups,
+        ]);
     }
 
     public function selectAll()
@@ -110,14 +132,35 @@ class Index extends Component
                     'status' => $response->status(),
                     'response' => $response->json()
                 ]);
-                throw new \Exception('Failed to create Salla customer: '.$response->body());
+                throw new \Exception('Failed to create Salla customer: ' . $response->body());
             }
 
             return $response->json('data');
-
         } catch (\Exception $e) {
-            Log::error('Salla Service Error: '.$e->getMessage());
+            Log::error('Salla Service Error: ' . $e->getMessage());
             throw $e;
         }
+    }
+
+    public function showCampForm()
+    {
+        $this->campForm = true;
+    }
+
+    public function hideCampForm()
+    {
+        $this->campForm = false;
+    }
+
+    public function createCampaign()
+    {
+        $campaign = new Campaign();
+        $campaign->clients = $this->selectedClientIds;
+        $campaign->name = $this->campData['name'];
+        $campaign->store_id = Auth::user()->active_id;
+        $campaign->activated_at = Carbon::now();
+        $campaign->time_lapse = $this->campData['time'];
+        $campaign->status = true;
+        $campaign->save();
     }
 }

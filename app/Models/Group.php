@@ -12,11 +12,7 @@ class Group extends Model
     protected $fillable = [
         'store_id',
         'group',
+        'clients',
         'name'
     ];
-
-    public function clients()
-    {
-        return $this->hasMany(Client::class);
-    }
 }
