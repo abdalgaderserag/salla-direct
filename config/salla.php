@@ -1,10 +1,10 @@
 <?php
-$id = '21eb0b5d-a66e-4497-a136-d43252d17174';
+$id = '9fc6b8f8-f608-484c-a0b1-5026512246e3';
 return [
     'client' =>[
         'id' => $id,
-        'secret' => '126de0910f9965382af6b7e4c7492570',
-        'webhook_secret' => ''
+        'secret' => 'eb814913ec536f7e2b63c52417da3013',
+        'webhook_secret' => 'b5c9c41c01f0ce26062dafa04993d463'
     ],
 
     'urls' => [

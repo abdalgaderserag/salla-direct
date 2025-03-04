@@ -120,33 +120,33 @@ class CallbackController extends Controller
             // Prepare data
             $data = [
                 'username'       => $apiClient['first_name'] . ' ' . $apiClient['last_name'],
-                'client_id'      => $apiClient['id'],
+                'salla_id'       => $apiClient['id'],
                 'store_id'       => $user->active_id,
-                'groups'         => $groups,
+                'groups'         => json_encode($groups),
                 'gender'         => $apiClient['gender'] ?? null,
                 'city'           => $apiClient['city'] ?? null,
-                'phone'          => '+' . ($apiClient['mobile_code'] ?? '') . ' ' . ($apiClient['mobile'] ?? ''),
+                'phone'          => ($apiClient['mobile_code'] ?? '') . ' ' . ($apiClient['mobile'] ?? ''),
                 'email'          => $apiClient['email'],
-                'update_date'    => $apiClient['updated_at']['date'],
+                'register_date'    => $apiClient['updated_at']['date'],
             ];
 
             $cli = Client::create($data);
 
             // todo : check $group
-            foreach ($groups as $group) {
-                $g = $allGroups->where('group', $group)->first();
-                if (empty($g)) {
-                    $g = new Group();
-                    $g->store_id = $store->id;
-                    $g->group = $group;
-                    $g->clients = [$cli->id];
-                    $g->name = $group;
-                    $g->save();
-                } else {
-                    $g->clients = array_push($g->clients, $cli->id);
-                    $g->update();
-                }
-            }
+            // foreach ($groups as $group) {
+            //     $g = $allGroups->where('group', $group)->first();
+            //     if (empty($g)) {
+            //         $g = new Group();
+            //         $g->store_id = $store->id;
+            //         $g->group = $group;
+            //         $g->clients = [$cli->id];
+            //         $g->name = $group;
+            //         $g->save();
+            //     } else {
+            //         $g->clients = array_push($g->clients, $cli->id);
+            //         $g->update();
+            //     }
+            // }
         }
 
         // create groups

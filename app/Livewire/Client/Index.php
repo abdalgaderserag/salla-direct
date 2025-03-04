@@ -5,6 +5,7 @@ namespace App\Livewire\Client;
 use App\Models\Campaign;
 use App\Models\Client;
 use App\Models\Group;
+use App\Models\Salla\SallaAccessToken;
 use App\Salla;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -79,6 +80,11 @@ class Index extends Component
         }
     }
 
+    public function clearSearch()
+    {
+        $this->search = '';
+    }
+
     public function toggleClient($clientId)
     {
         $clientId = (int) $clientId;
@@ -122,8 +128,9 @@ class Index extends Component
     public function createCustomer(array $customerData)
     {
         try {
+            $access = SallaAccessToken::where('store_id', Auth::user()->active_id)->first();
             $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . Auth::user()->sallaAccessToken->access_token,
+                'Authorization' => 'Bearer ' . $access->access_token,
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json'
             ])->post('https://api.salla.dev/admin/v2/customers', [
@@ -131,9 +138,10 @@ class Index extends Component
                 'last_name' => $customerData['last_name'],
                 'email' => $customerData['email'],
                 'mobile' => $customerData['phone'],
+                'mobile_code_country' => $customerData['code'],
+                'country_code' => 'SD',
                 'gender' => $customerData['gender'],
                 'birthday' => $customerData['birthday'],
-                'notes' => 'Created via Laravel Integration'
             ]);
 
             if ($response->failed()) {
@@ -143,8 +151,19 @@ class Index extends Component
                 ]);
                 throw new \Exception('Failed to create Salla customer: ' . $response->body());
             }
-
-            return $response->json('data');
+            $res = json_decode($response->body());
+            $data = $res->data;
+            $c = new Client();
+            $c->username = $data->full_name;
+            $c->store_id = Auth::user()->active_id;
+            $c->salla_id = $data->id;
+            $c->groups = json_encode($data->groups ?? []);
+            $c->gender = $data->gender;
+            $c->phone = $data->mobile_code_country . ' ' . $data->mobile;
+            $c->email = $data->email;
+            $c->isBanned = false;
+            $c->register_date = Carbon::now();
+            $c->save();
         } catch (\Exception $e) {
             Log::error('Salla Service Error: ' . $e->getMessage());
             throw $e;

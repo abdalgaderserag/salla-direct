@@ -5,11 +5,12 @@
                 <h2 class="text-lg font-medium text-gray-800 dark:text-white">Banned customers</h2>
 
                 <span
-                    class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{{ $clients->count() }}
+                    class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{{ $this->clients->count() }}
                     customers</span>
             </div>
 
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">These are all the customers that are aligable to send campaigns to.</p>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">These are all the customers that will not receive
+                your messages.</p>
         </div>
 
         <div class="flex items-center mt-4 gap-x-3">
@@ -22,7 +23,7 @@
                     </svg>
                 </span>
 
-                <input type="text" placeholder="Search"
+                <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search"
                     class="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
             </div>
 
@@ -47,71 +48,91 @@
                         <thead class="bg-gray-50 dark:bg-gray-800">
                             <tr>
                                 <th scope="col"
-                                    class="py-3.5 px-2 w-10 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <input type="checkbox"
-                                        class="form-checkbox h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                                </th>
-                                <th scope="col"
                                     class="py-3.5 px-4 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <button class="flex items-center gap-x-3 focus:outline-none">
+                                    <button wire:click="sortBy('username')"
+                                        class="flex items-center gap-x-3 focus:outline-none">
                                         <span>Name</span>
+                                        {{-- todo : replace with svg --}}
+                                        @if ($sort !== 'username')
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                                            </svg>
+                                        @elseif ($sortDir === 'ASC')
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                                            </svg>
+                                        @else
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                             </svg>
+
+                                        @endif
                                     </button>
                                 </th>
                                 <th scope="col"
-                                    class="px-12 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    Groups</th>
+                                    class="px-12 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
+                                    <span wire:click="sortBy('groups')">Groups</span>
+                                </th>
                                 <th scope="col"
-                                    class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    Info</th>
+                                    class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
+                                    <span wire:click="sortBy('email')">Info</span>
+                                </th>
                                 <th scope="col"
-                                    class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    City</th>
+                                    class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
+                                    <span wire:click="sortBy('city')">City</span>
+                                </th>
                                 <th scope="col"
-                                    class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    Register at</th>
-                                <th scope="col" class="relative py-3.5 px-4 w-1/6"><span class="sr-only">Edit</span>
+                                    class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
+                                    <span wire:click="sortBy('register_date')">Register at</span>
                                 </th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                            @forelse ($clients as $client)
+                            @forelse ($this->clients as $client)
                                 <tr>
-                                    <td class="px-2 py-4 text-sm font-medium whitespace-nowrap">
-                                        <input type="checkbox"
-                                            class="form-checkbox h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                                    </td>
+
                                     <td
                                         class="px-4 py-4 text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
-                                        <h2 class="font-medium text-gray-800 dark:text-white">{{ $client->username }}
-                                        </h2>
+                                        <input wire:click="toggleClient({{ $client->id }})" type="checkbox"
+                                            id="{{ $client->id }}"
+                                            {{ in_array($client->id, $selectedBanClientIds) ? 'checked' : '' }}
+                                            class="form-checkbox mx-2 h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer">
+                                        <label for="{{ $client->id }}"
+                                            class="font-medium text-gray-800 dark:text-white cursor-pointer">{{ $client->username }}
+                                        </label>
                                     </td>
                                     <td
                                         class="px-12 py-4 text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
-                                        {{-- <span class="px-3 py-1 text-xs text-yellow-600 bg-yellow-100 rounded-full dark:bg-gray-800 dark:text-blue-400">long-term</span> --}}
-                                        {{-- <span class="px-3 py-1 text-xs text-red-600 bg-red-100 rounded-full dark:bg-gray-800 dark:text-blue-400">Prepaid</span> --}}
-                                        {{-- @forelse ($client->groups as $g)
+                                    @empty($client->groups)
+                                        <span class="px-1 py-1 text-xs dark:text-gray-100">not in group</span>
+                                    @else
+                                        @foreach ($client->groups as $g)
                                             <span
                                                 class="px-3 py-1 text-xs text-red-600 bg-red-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{{ $g }}</span>
-                                        @empty
-                                        @endforelse
-                                        <span class="px-1 py-1 text-xs dark:bg-gray-800 dark:text-blue-400">+2</span> --}}
-                                    </td>
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
-                                        <h4 class="text-gray-800 font-medium dark:text-gray-200">{{ $client->email }}
-                                        </h4>
-                                        <p class="text-sm font-normal text-gray-600 dark:text-gray-400">
-                                            {{ $client->phone }}</p>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
-                                        <h4 class="text-gray-700 dark:text-gray-200">{{ $client->city }}</h4>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
-                                        <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                            {{ $client->created_at }}</p>
-                                    </td>
-                                </tr>
-                            @empty
-
+                                        @endforeach
+                            @endif
+                            </td>
+                            <td class="px-4 py-4 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+                                <h4 class="text-gray-800 font-medium dark:text-gray-200">{{ $client->email }}
+                                </h4>
+                                <p class="text-sm font-normal text-gray-600 dark:text-gray-400">
+                                    {{ $client->phone }}</p>
+                            </td>
+                            <td class="px-4 py-4 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+                                <h4 class="text-gray-700 dark:text-gray-200">{{ $client->city }}</h4>
+                            </td>
+                            <td class="px-4 py-4 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+                                <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                    {{ $client->created_at }}</p>
+                            </td>
+                            </tr>
+                        @empty
                             @endforelse
                         </tbody>
                     </table>
@@ -121,39 +142,7 @@
         </div>
     </div>
 
-    <div class="mt-6 sm:flex sm:items-center sm:justify-between ">
-        <div class="text-sm text-gray-500 dark:text-gray-400">
-            Page <span class="font-medium text-gray-700 dark:text-gray-100">1 of 10</span>
-        </div>
-
-        <div class="flex items-center mt-4 gap-x-4 sm:mt-0">
-            <a href="#"
-                class="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-                </svg>
-
-                <span>
-                    previous
-                </span>
-            </a>
-
-            <a href="#"
-                class="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800">
-                <span>
-                    Next
-                </span>
-
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-                </svg>
-            </a>
-        </div>
+    <div class="mt-6">
+        {{ $this->clients->links() }}
     </div>
 </section>
-
-
-
