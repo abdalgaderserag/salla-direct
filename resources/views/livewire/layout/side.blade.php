@@ -92,7 +92,7 @@
                     <span class="mx-2 text-sm font-medium">Auto messages</span>
                 </a>
 
-                <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
+                {{-- <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
                     href="#">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-5 h-5">
@@ -101,7 +101,7 @@
                     </svg>
 
                     <span class="mx-2 text-sm font-medium">Bounces</span>
-                </a>
+                </a> --}}
             </div>
 
             <div class="space-y-3 ">

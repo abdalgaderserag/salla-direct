@@ -121,7 +121,6 @@ class Index extends Component
     {
         // $salla = new Salla();
         $res = $this->createCustomer($this->requestData);
-        dd($res);
         $this->removeClient();
     }
 
@@ -159,7 +158,7 @@ class Index extends Component
             $c->salla_id = $data->id;
             $c->groups = json_encode($data->groups ?? []);
             $c->gender = $data->gender;
-            $c->phone = $data->mobile_code_country . ' ' . $data->mobile;
+            $c->phone = $data->mobile_code . ' ' . $data->mobile;
             $c->email = $data->email;
             $c->isBanned = false;
             $c->register_date = Carbon::now();

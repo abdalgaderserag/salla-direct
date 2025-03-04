@@ -51,6 +51,9 @@ class WebhookController extends Controller
             case 'order.payment.updated':
                 $this->handleOrderPayment($data, $event);
 
+            case 'review.added':
+                $this->handleSoloEvent($data, $event);
+
 
             case 'user.update':
                 $this->handleUserUpdated($data);
@@ -94,22 +97,19 @@ class WebhookController extends Controller
     private function handleSoloEvent($data, $event)
     {
         $auto = Auto::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event)->first();
-        $this->fireMessage($auto->message, $data['customer_id']);
+        $this->fireMessage($auto->message, $data['customer']['id']);
     }
 
     private function handleOrderUpdated($data, $event)
     {
         $autos = Auto::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event);
         switch ($data['status']) {
-            case 'rating':
-                $auto = $autos->where('type','=','rating')->first();
-                break;
             case 'order completed':
                 # code...
-                $auto = $autos->where('type','=','order-completed')->first();
+                $auto = $autos->where('type', '=', 'order-completed')->first();
                 break;
             case 'refunding order':
-                $auto = $autos->where('type','=','refunding-order')->first();
+                $auto = $autos->where('type', '=', 'refunding-order')->first();
                 break;
         }
         $this->fireMessage($auto->message, $data['customer_id']);
@@ -120,18 +120,17 @@ class WebhookController extends Controller
         $autos = Auto::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event);
         switch ($data['status']) {
             case 'payment on arrival confirmation':
-                $auto = $autos->where('type','=','payment-arrival')->first();
+                $auto = $autos->where('type', '=', 'payment-arrival')->first();
                 break;
             case 'order is waiting for payment':
-                $auto = $autos->where('type','=','payment-waiting')->first();
+                $auto = $autos->where('type', '=', 'payment-waiting')->first();
                 break;
         }
         $this->fireMessage($auto->message, $data['customer_id']);
     }
 
-    private function fireMessage(Message $message, $customer_id)
+    private function fireMessage(Message $message, Client $client)
     {
-        $client = Client::where('salla_id', '=', $customer_id)->first();
         new SendWhatsappMessage($message, $client->phone);
     }
 }

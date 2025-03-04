@@ -47,8 +47,8 @@ return [
             'title' => 'rating',
             'description' => 'send a message to user asking for rating after order delivered',
             'message' => '',
-            'event' => 'order.updated',
-            'type' => 'rating',
+            'event' => 'review.added',
+            'type' => '',
         ],
         [
             'title' => 'OTP',

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('store_id');
             $table->bigInteger('salla_id', false, true);
-            $table->string('username')->unique();
+            $table->string('username');
             $table->json('groups')->nullable();
             $table->string('gender');
             $table->string('city')->nullable();
