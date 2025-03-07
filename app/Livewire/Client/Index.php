@@ -46,7 +46,7 @@ class Index extends Component
             $clients = $clients->where('groups', $this->group);
         }
         if ($this->search != '') {
-            $clients = $clients->where('username', 'like', "%{$this->search}%")->orWhere('phone', 'like', "%{$this->search}%");
+            $clients = $clients->where('username', 'like', "%{$this->search}%");
         }
         return $clients->orderBy($this->sort, $this->sortDir)->paginate(10);
     }
@@ -122,6 +122,16 @@ class Index extends Component
         // $salla = new Salla();
         $res = $this->createCustomer($this->requestData);
         $this->removeClient();
+    }
+
+    public function saveCamp() {
+        $campaign = new Campaign();
+        $campaign->store_id = Auth::user()->active_id;
+        $campaign->name = $this->campData['name'];
+        $campaign->time_lapse = $this->campData['time'];
+        $campaign->status = true;
+        $campaign->clients = json_encode(Session::get('selected_clients', []));
+        $campaign->save();
     }
 
     public function createCustomer(array $customerData)

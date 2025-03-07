@@ -26,7 +26,7 @@ class ClientFactory extends Factory
             'store_id' => 1,
             'groups' => '[1111]',
             'salla_id' => random_int(0,1999),
-            'isBanned' => true
+            'isBanned' => false
         ];
     }
 }

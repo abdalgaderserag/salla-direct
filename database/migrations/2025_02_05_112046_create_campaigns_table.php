@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('store_id')->unsigned();
             $table->timestamp('activated_at');
             $table->integer('time_lapse')->unsigned();
-            $table->json('groups');
+            $table->json('clients');
             $table->integer('status')->unsigned();
             $table->timestamps();
         });

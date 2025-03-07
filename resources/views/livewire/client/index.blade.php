@@ -146,7 +146,7 @@
                     class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{{ count(Session::get('selected_clients', [])) }}
                     customer selected</span>
 
-                <form wire:submit.prevent="save">
+                <form wire:submit.prevent="saveCamp">
                     <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
 
                         <div>
