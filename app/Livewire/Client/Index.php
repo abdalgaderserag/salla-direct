@@ -132,6 +132,10 @@ class Index extends Component
         $campaign->status = true;
         $campaign->clients = json_encode(Session::get('selected_clients', []));
         $campaign->save();
+
+        Session::remove('selected_clients');
+
+        redirect()->route('campaigns.index');
     }
 
     public function createCustomer(array $customerData)
@@ -199,5 +203,6 @@ class Index extends Component
         $campaign->time_lapse = $this->campData['time'];
         $campaign->status = true;
         $campaign->save();
+        Session::put('selected_clients', []);
     }
 }
