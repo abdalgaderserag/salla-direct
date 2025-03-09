@@ -233,31 +233,151 @@
                                         <button wire:click="sortBy('username')"
                                             class="flex items-center gap-x-3 focus:outline-none">
                                             <span>Name</span>
-                                            {{-- todo : replace with svg --}}
                                             @if ($sort !== 'username')
-                                                <>
-                                                @elseif ($sortDir === 'ASC')
-                                                    ^
-                                                @else
-                                                    &
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                                                </svg>
+                                            @elseif ($sortDir === 'ASC')
+                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                                    stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                                                </svg>
+                                            @else
+                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                                    stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                                </svg>
+
                                             @endif
+
                                         </button>
                                     </th>
                                     <th scope="col"
                                         class="px-12 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
-                                        <span wire:click="sortBy('groups')">Groups</span>
+                                        <button wire:click="sortBy('groups')"
+                                            class="flex items-center gap-x-3 focus:outline-none">
+                                            <span>Groups</span>
+                                            @if ($sort !== 'groups')
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                                                </svg>
+                                            @elseif ($sortDir === 'ASC')
+                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                                    stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                                                </svg>
+                                            @else
+                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                                    stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                                </svg>
+
+                                            @endif
+                                        </button>
                                     </th>
                                     <th scope="col"
                                         class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
-                                        <span wire:click="sortBy('email')">Info</span>
+                                        <button wire:click="sortBy('email')"
+                                            class="flex items-center gap-x-3 focus:outline-none">
+                                            <span>Infos</span>
+                                            @if ($sort !== 'email')
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                                                </svg>
+                                            @elseif ($sortDir === 'ASC')
+                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                                    stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                                                </svg>
+                                            @else
+                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                                    stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                                </svg>
+
+                                            @endif
+                                        </button>
                                     </th>
                                     <th scope="col"
                                         class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
-                                        <span wire:click="sortBy('city')">City</span>
+                                        <button wire:click="sortBy('city')"
+                                            class="flex items-center gap-x-3 focus:outline-none">
+                                            <span>City</span>
+                                            @if ($sort !== 'city')
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                                                </svg>
+                                            @elseif ($sortDir === 'ASC')
+                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                                    stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                                                </svg>
+                                            @else
+                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                                    stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                                </svg>
+
+                                            @endif
+                                        </button>
                                     </th>
                                     <th scope="col"
                                         class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
-                                        <span wire:click="sortBy('register_date')">Register at</span>
+                                        <button wire:click="sortBy('register_date')"
+                                            class="flex items-center gap-x-3 focus:outline-none">
+                                            <span>Register At</span>
+                                            @if ($sort !== 'register_date')
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                                                </svg>
+                                            @elseif ($sortDir === 'ASC')
+                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                                    stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                                                </svg>
+                                            @else
+                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                                    stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                                </svg>
+
+                                            @endif
+                                        </button>
                                     </th>
                                 </tr>
                             </thead>
@@ -297,7 +417,7 @@
                                 </td>
                                 <td class="px-4 py-4 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
                                     <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                        {{ $client->created_at }}</p>
+                                        {{ \Carbon\Carbon::parse($client->created_at)->diffForHumans() }}</p>
                                 </td>
                                 </tr>
                             @empty

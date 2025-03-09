@@ -18,5 +18,7 @@ class Side extends Component
 
     public function changeStore($id) {
         Auth::user()->active_id = $id;
+        Auth::user()->update();
+        $this->dispatch('store-changed');
     }
 }

@@ -31,4 +31,7 @@ class Index extends Component
         $c = Campaign::where('id', $id)->first();
         $c->delete();
     }
+    public function clearSearch() {
+        $this->search = '';
+    }
 }

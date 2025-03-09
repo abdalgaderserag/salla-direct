@@ -133,3 +133,8 @@
         </nav>
     </div>
 </aside>
+<script>
+    document.addEventListener('store-changed', () => {
+        location.reload();
+    });
+</script>
