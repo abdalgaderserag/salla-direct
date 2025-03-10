@@ -110,7 +110,7 @@ return [
             'title' => 'shipment arrived',
             'description' => 'send a message to user informing that the shipment arrived',
             'message' => '',
-            'event' => 'shipment.completed',
+            'event' => 'shipment.updated',
             'type' => 'shipment.completed',
         ],
     ]

@@ -2,6 +2,7 @@
 
 namespace App\Models\Salla;
 
+use App\Models\Client;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,7 @@ class Store extends Model
     protected $fillable = [
         'user_id',
         'store_id',
+        'merchant',
         'name',
         'email',
         'avatar',
@@ -21,6 +23,10 @@ class Store extends Model
 
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    public function clients() {
+        $this->hasMany(Client::class);
     }
 
     public function sallaAccessToken(){

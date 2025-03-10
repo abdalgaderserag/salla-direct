@@ -7,29 +7,24 @@ use App\Jobs\SendWhatsappMessage;
 use App\Models\Auto;
 use App\Models\Client;
 use App\Models\Message;
+use App\Models\Salla\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class WebhookController extends Controller
 {
-    /**
-     * Handle incoming Salla webhook events.
-     */
     public function handleWebhook(Request $request)
     {
-        // Log the incoming request for debugging
         Log::info('Salla Webhook Received:', $request->all());
 
-        // Verify the webhook signature
         if (!$this->verifySignature($request)) {
             Log::warning('Invalid Salla webhook signature', ['ip' => $request->ip()]);
             return response()->json(['error' => 'Invalid signature'], 401);
         }
 
-
-        // Extract event type and data
-        $event = $request->input('event'); // e.g., "product.created"
+        $event = $request->input('event');
         $data = $request->input('data');
+        $store = Store::where('merchant', $request->input('merchant'))->first();
 
         switch ($event) {
 
@@ -42,21 +37,25 @@ class WebhookController extends Controller
             case 'shipment.created':
             case 'shipment.completed':
             case 'shipment.updated':
-                $this->handleSoloEvent($data, $event);
+            case 'review.added':
+                $this->handleSoloEvent($data, $event, $store);
                 break;
 
             case 'order.updated':
-                $this->handleOrderUpdated($data, $event);
+                $this->handleOrderUpdated($data, $event, $store);
                 break;
             case 'order.payment.updated':
-                $this->handleOrderPayment($data, $event);
+                $this->handleOrderPayment($data, $event, $store);
+                break;
 
-            case 'review.added':
-                $this->handleSoloEvent($data, $event);
 
 
             case 'user.update':
-                $this->handleUserUpdated($data);
+                $this->handleUserUpdated($data, $store);
+                break;
+
+            case 'user.created':
+                $this->handleUserUpdated($data, $store);
                 break;
 
             default:
@@ -78,10 +77,10 @@ class WebhookController extends Controller
         return hash_equals($signature, $computedSignature);
     }
 
-    private function handleUserUpdated($data)
+    private function handleUserUpdated($data, Store $store)
     {
         $user = Client::updateOrCreate(
-            ['salla_id' => $data['id']],
+            ['salla_id' => $store->id],
             [
                 'username' => $data['first_name'] . ' ' . $data['last_name'],
                 'email' => $data['email'],
@@ -94,30 +93,36 @@ class WebhookController extends Controller
         );
     }
 
-    private function handleSoloEvent($data, $event)
+    private function handleSoloEvent($data, $event, Store $store)
     {
-        $auto = Auto::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event)->first();
-        $this->fireMessage($auto->message, $data['customer']['id']);
+        $auto = Auto::where('store_id', $store->id)
+            ->where('event', $event)
+            ->first();
+        $client = $store->clients->where('salla_id',$data['customer']['id'])->first();
+        $this->fireMessage($auto->message,$client);
     }
 
-    private function handleOrderUpdated($data, $event)
+    private function handleOrderUpdated($data, $event, Store $store)
     {
-        $autos = Auto::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event);
+        $autos = Auto::all()->where('store_id', '=', $store->id)->where('event', '=', $event);
         switch ($data['status']) {
-            case 'order completed':
-                # code...
-                $auto = $autos->where('type', '=', 'order-completed')->first();
+            case 'تم التنفيذ':
+                $auto = $autos->where('type', '=', 'order.completed')->first();
                 break;
             case 'refunding order':
-                $auto = $autos->where('type', '=', 'refunding-order')->first();
+                $auto = $autos->where('type', '=', 'refunding.order')->first();
                 break;
         }
-        $this->fireMessage($auto->message, $data['customer_id']);
+        $client = $store->clients->where('salla_id',$data['customer']['id'])->first();
+
+        $this->fireMessage($auto->message, $client);
     }
 
-    private function handleOrderPayment($data, $event)
+    private function handleOrderPayment($data, $event, $merchant)
     {
-        $autos = Auto::all()->where('store_id', '=', $data['store_id'])->where('event', '=', $event);
+        $store = Store::where('merchant', $merchant)->first();
+
+        $autos = Auto::all()->where('store_id', '=', $store->id)->where('event', '=', $event);
         switch ($data['status']) {
             case 'payment on arrival confirmation':
                 $auto = $autos->where('type', '=', 'payment-arrival')->first();
@@ -129,8 +134,9 @@ class WebhookController extends Controller
         $this->fireMessage($auto->message, $data['customer_id']);
     }
 
+
     private function fireMessage(Message $message, Client $client)
     {
-        new SendWhatsappMessage($message, $client->phone);
+        dispatch(new SendWhatsappMessage($message, $client->phone));
     }
 }
