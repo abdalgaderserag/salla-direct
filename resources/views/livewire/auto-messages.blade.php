@@ -56,12 +56,12 @@
                 <div>
                     <span
                         class="text-xl cursor-pointer font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200"
-                        wire:click="showEventWindow('{{ json_encode($event) }}')">{{ $event['title'] }}</span>
+                        wire:click="showEventWindow({{ $i }})">{{ $event['title'] }}</span>
                     <span
                         class="px-3 py-1 mx-4 text-xs text-green-600 bg-green-100 rounded-full dark:bg-gray-800 dark:text-green-400">Active</span>
                 </div>
                 <div class="flex">
-                    <div wire:click="active('{{ json_encode($event) }}')"
+                    <div wire:click="active({{ $i }})"
                         class="relative w-10 h-5 transition duration-200 ease-linear rounded-full cursor-pointer bg-gray-300 dark:bg-gray-700">
                         <label for="active"
                             class="absolute left-0 w-5 h-5 mb-2 transition duration-100 ease-linear transform bg-white border-2 rounded-full cursor-pointer dark:bg-gray-100 translate-x-0 border-gray-300 dark:border-gray-700"></label><input

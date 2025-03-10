@@ -20,32 +20,19 @@ class AutoMessages extends Component
         return view('livewire.auto-messages');
     }
 
-    public function active($event)
+    public function active($index)
     {
-        if ($event['type'] == '') {
-            $auto = Auto::where('store_id', '=', Auth::user()->active_id)->where('event', '=', $event['event'])->first();
-        } else {
-            $auto = Auto::where('store_id', '=', Auth::user()->active_id)->where('type', '=', $event['type'])->first();
-        }
-        if (empty($auto)) {
-            $message = new Message();
-            $message->context = $event['message'];
-            $message->save();
-            $auto = new Auto();
-            $auto->message_id = $message->id;
-            $auto->store_id = Auth::user()->active_id;
-            $auto->type = $event['type'];
-            $auto->event = $event['event'];
-            $auto->active = true;
-            $auto->save();
-        } else {
-            $auto->active = ! $auto->active;
-            $auto->update();
-        }
+        $events = config('salla.events');
+        $event = $events[$index];
+        $auto = Auto::where('store_id', '=', Auth::user()->active_id)->where('type', '=', $event['type'])->first();
+        $auto->active = ! $auto->active;
+        $auto->update();
     }
 
-    function showEventWindow($event)
+    function showEventWindow($index)
     {
+        $events = config('salla.events');
+        $event = $events[$index];
         $this->activeEvent = $event;
         $this->showEvent = true;
     }

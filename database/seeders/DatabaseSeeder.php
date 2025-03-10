@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Auto;
 use App\Models\Client;
 use App\Models\Group;
+use App\Models\Message;
 use App\Models\Salla\Store;
 use App\Models\User;
 use Exception;
@@ -31,6 +33,20 @@ class DatabaseSeeder extends Seeder
         Store::factory(1)->create([
             'user_id' => $u->id,
         ]);
+
+        $events = config('salla.events');
+        foreach ($events as $event) {
+            $message = new Message();
+            $message->context = $event['message'];
+            $message->save();
+            $auto = new Auto();
+            $auto->message_id = $message->id;
+            $auto->store_id = 1;
+            $auto->type = $event['type'];
+            $auto->event = $event['event'];
+            $auto->active = true;
+            $auto->save();
+        }
 
         Group::factory()->create();
 

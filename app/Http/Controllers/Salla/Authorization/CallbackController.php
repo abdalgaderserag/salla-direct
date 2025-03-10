@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Salla\Authorization;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Salla\Authorization\CallbackRequest;
+use App\Models\Auto;
 use App\Models\Client;
 use App\Models\Group;
+use App\Models\Message;
 use App\Models\Salla\SallaAccessToken;
 use App\Models\Salla\Store;
 use App\Salla;
@@ -160,6 +162,21 @@ class CallbackController extends Controller
                 'name' => $apiGroup['name']
             ];
             Group::create($data);
+        }
+
+        //create auto messages
+        $events = config('salla.events');
+        foreach ($events as $event) {
+            $message = new Message();
+            $message->context = $event['message'];
+            $message->save();
+            $auto = new Auto();
+            $auto->message_id = $message->id;
+            $auto->store_id = Auth::user()->active_id;
+            $auto->type = $event['type'];
+            $auto->event = $event['event'];
+            $auto->active = true;
+            $auto->save();
         }
     }
 }

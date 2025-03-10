@@ -20,98 +20,98 @@ return [
             'description' => 'create a message to remind customers of there abounded carts',
             'message' => '',
             'event' => 'abandoned.cart',
-            'type' => '',
+            'type' => 'abandoned.cart',
         ],
         [
             'title' => 'welcome customer',
             'description' => 'create a message to welcome customers',
             'message' => '',
             'event' => 'customer.created',
-            'type' => '',
+            'type' => 'customer.created',
         ],
         [
             'title' => 'new request',
             'description' => 'create a new request message',
             'message' => '',
             'event' => 'order.created',
-            'type' => '',
+            'type' => 'order.created',
         ],
         [
             'title' => 'payment on arrival confirmation',
             'description' => 'send a confirmation message to user',
             'message' => '',
             'event' => 'order.payment.updated',
-            'type' => 'payment-arrival'
+            'type' => 'payment.arrival'
         ],
         [
             'title' => 'rating',
             'description' => 'send a message to user asking for rating after order delivered',
             'message' => '',
             'event' => 'review.added',
-            'type' => '',
+            'type' => 'review.added',
         ],
         [
             'title' => 'OTP',
             'description' => 'send a OTP message to user',
             'message' => '',
             'event' => 'customer.login',
-            'type' => '',
+            'type' => 'customer.login',
         ],
         [
             'title' => 'shipment sended',
             'description' => 'send a shipment message to the user',
             'message' => '',
             'event' => 'shipment.created',
-            'type' => '',
+            'type' => 'shipment.created',
         ],
         [
             'title' => 'order is waiting for payment',
             'description' => 'send a message to user informing that the order is waiting for payment',
             'message' => '',
             'event' => 'order.payment.updated',
-            'type' => 'payment-waiting'
+            'type' => 'payment.waiting'
         ],
         [
             'title' => 'order completed',
             'description' => 'send a message to user informing that the order completed',
             'message' => '',
             'event' => 'order.updated',
-            'type'=> 'order-completed'
+            'type'=> 'order.completed'
         ],
         [
             'title' => 'order canceled',
             'description' => 'send a message to user informing that the order canceled',
             'message' => '',
             'event' => 'order.canceled',
-            'type' => '',
+            'type' => 'order.canceled',
         ],
         [
             'title' => 'order refunded',
             'description' => 'send a message to user informing that the order refunded',
             'message' => '',
             'event' => 'order.refunded',
-            'type' => '',
+            'type' => 'order.refunded',
         ],
         [
             'title' => 'refunding order',
             'description' => 'send a message to user informing that order refunding in progress',
             'message' => '',
             'event' => 'order.updated',
-            'type' => 'refunding-order',
+            'type' => 'refunding.order',
         ],
         [
             'title' => 'shipment in progress',
             'description' => 'send a message to user informing that the shipment in progress',
             'message' => '',
             'event' => 'shipment.updated',
-            'type' => '',
+            'type' => 'shipment.updated',
         ],
         [
             'title' => 'shipment arrived',
             'description' => 'send a message to user informing that the shipment arrived',
             'message' => '',
             'event' => 'shipment.completed',
-            'type' => '',
+            'type' => 'shipment.completed',
         ],
     ]
 ];
