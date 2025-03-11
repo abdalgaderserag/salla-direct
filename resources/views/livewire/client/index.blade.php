@@ -2,15 +2,14 @@
     <div class="sm:flex sm:items-center sm:justify-between">
         <div>
             <div class="flex items-center gap-x-3">
-                <h2 class="text-lg font-medium text-gray-800 dark:text-white">Customers</h2>
+                <h2 class="text-lg font-medium text-gray-800 dark:text-white">{{ __('views.list.header') }}</h2>
 
                 <span
                     class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{{ count(Session::get('selected_clients', [])) }}
-                    customer selected</span>
+                    {{ __('views.list.header.count') }}</span>
             </div>
 
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">These are all the customers that are aligable to
-                send campaigns to.</p>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">{{ __('views.list.header.details') }}</p>
         </div>
 
         <div class="flex items-center mt-4 gap-x-3">
@@ -29,7 +28,7 @@
                     </defs>
                 </svg>
 
-                <span>Export</span>
+                <span>{{ __('views.list.header.export') }}</span>
             </button>
 
 
@@ -41,7 +40,7 @@
                         d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
 
-                <span>Create Campaign</span>
+                <span>{{ __('views.list.header.camp') }}</span>
             </button>
 
             <button
@@ -52,7 +51,7 @@
                         d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
 
-                <span wire:click="addClient">Add Customer</span>
+                <span wire:click="addClient">{{ __('views.list.header.add') }}</span>
             </button>
         </div>
     </div>
@@ -61,50 +60,63 @@
             wire:click="removeClient">
 
             <section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800" @click.stop>
-                <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white">Account settings</h2>
+                <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white">
+                    {{ __('views.settings.title') }}
+                </h2>
 
                 <form wire:submit.prevent="save">
                     <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
                         <div>
-                            <label class="text-gray-700 dark:text-gray-200" for="first_name">First Name</label>
+                            <label class="text-gray-700 dark:text-gray-200" for="first_name">
+                                {{ __('views.labels.first_name') }}
+                            </label>
                             <input id="first_name" type="text" wire:model="requestData.first_name"
                                 class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
                         </div>
 
                         <div>
-                            <label class="text-gray-700 dark:text-gray-200" for="last_name">Last Name</label>
+                            <label class="text-gray-700 dark:text-gray-200" for="last_name">
+                                {{ __('views.labels.last_name') }}
+                            </label>
                             <input id="last_name" type="text" wire:model="requestData.last_name"
                                 class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
                         </div>
 
                         <div>
-                            <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Email Address</label>
+                            <label class="text-gray-700 dark:text-gray-200" for="emailAddress">
+                                {{ __('views.labels.email') }}
+                            </label>
                             <input id="emailAddress" type="email" wire:model="requestData.email"
                                 class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
                         </div>
 
                         <div>
-                            <label for="Birthday"
-                                class="block text-sm text-gray-500 dark:text-gray-300">Birthday</label>
+                            <label for="Birthday" class="block text-sm text-gray-500 dark:text-gray-300">
+                                {{ __('views.labels.birthday') }}
+                            </label>
                             <input type="date" wire:model="requestData.birthday"
                                 class="block mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
                         </div>
 
                         <div>
-                            <label for="gender" class="block text-sm text-gray-500 dark:text-gray-300">Gender</label>
+                            <label for="gender" class="block text-sm text-gray-500 dark:text-gray-300">
+                                {{ __('views.labels.gender') }}
+                            </label>
                             <select id="gender" wire:model="requestData.gender"
                                 class="block mt-2 w-full rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
-                                <option value="">Select Gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
+                                <option value="">{{ __('views.options.select_gender') }}</option>
+                                <option value="male">{{ __('views.options.male') }}</option>
+                                <option value="female">{{ __('views.options.female') }}</option>
                             </select>
-                        </div><br>
+                        </div>
 
                         <div>
-                            <label for="code" class="block text-sm text-gray-500 dark:text-gray-300">Code</label>
+                            <label for="code" class="block text-sm text-gray-500 dark:text-gray-300">
+                                {{ __('views.labels.code') }}
+                            </label>
                             <select id="code" wire:model="requestData.code"
                                 class="block mt-2 w-full rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
-                                <option value="">Select Counter Code</option>
+                                <option value="">{{ __('views.options.select_code') }}</option>
                                 <option value="+249">+249</option>
                                 <option value="+80">+80</option>
                                 <option value="+1">+1</option>
@@ -112,7 +124,9 @@
                         </div>
 
                         <div>
-                            <label class="text-gray-700 dark:text-gray-200" for="phone">Phone Number</label>
+                            <label class="text-gray-700 dark:text-gray-200" for="phone">
+                                {{ __('views.labels.phone') }}
+                            </label>
                             <input id="phone" type="tel" wire:model="requestData.phone"
                                 class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
                         </div>
@@ -120,15 +134,12 @@
 
                     <div class="flex justify-end mt-6">
                         <button
-                            class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">Save</button>
+                            class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
+                            {{ __('views.button.save') }}
+                        </button>
                     </div>
                 </form>
             </section>
-
-
-
-
-
         </div>
     @endif
 
@@ -181,22 +192,10 @@
 
 
     <div class="mt-6 md:flex md:items-center md:justify-between">
-        {{-- <div
-            class="inline-flex overflow-hidden bg-white border divide-x rounded-lg dark:bg-gray-900 rtl:flex-row-reverse dark:border-gray-700 dark:divide-gray-700">
-            <button
-                class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 bg-gray-100 sm:text-sm dark:bg-gray-800 dark:text-gray-300">
-                Customers
-            </button>
-            <button
-                class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:hover:bg-gray-800 dark:text-gray-300 hover:bg-gray-100">
-                Groups
-            </button>
-
-        </div> --}}
         <div class="inline-flex overflow-hidden">
             <select wire:model.live='group' id="groups"
                 class="block mt-2 pr-8 w-full rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
-                <option value="">All Customers</option>
+                <option value="">{{ __('views.list.button.groups') }}</option>
                 @forelse ($groups as $g)
                     <option value="{{ $g->group }}">{{ $g->name }}</option>
                 @empty
@@ -214,7 +213,8 @@
                 </svg>
             </span>
 
-            <input type="text" wire:model.live.debounce.250ms="search" placeholder="Search"
+            <input type="text" wire:model.live.debounce.250ms="search"
+                placeholder="{{ __('views.layout.side.search') }}"
                 class="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
         </div>
     </div>
@@ -232,7 +232,7 @@
                                         class="py-3.5 px-4 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                         <button wire:click="sortBy('username')"
                                             class="flex items-center gap-x-3 focus:outline-none">
-                                            <span>Name</span>
+                                            <span>{{ __('views.list.table.head.name') }}</span>
                                             @if ($sort !== 'username')
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -263,7 +263,7 @@
                                         class="px-12 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
                                         <button wire:click="sortBy('groups')"
                                             class="flex items-center gap-x-3 focus:outline-none">
-                                            <span>Groups</span>
+                                            <span>{{ __('views.list.table.head.groups') }}</span>
                                             @if ($sort !== 'groups')
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -293,7 +293,7 @@
                                         class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
                                         <button wire:click="sortBy('email')"
                                             class="flex items-center gap-x-3 focus:outline-none">
-                                            <span>Infos</span>
+                                            <span>{{ __('views.list.table.head.info') }}</span>
                                             @if ($sort !== 'email')
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -323,7 +323,7 @@
                                         class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
                                         <button wire:click="sortBy('city')"
                                             class="flex items-center gap-x-3 focus:outline-none">
-                                            <span>City</span>
+                                            <span>{{ __('views.list.table.head.city') }}</span>
                                             @if ($sort !== 'city')
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -353,7 +353,7 @@
                                         class="px-4 py-3.5 w-1/6 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400 cursor-pointer">
                                         <button wire:click="sortBy('register_date')"
                                             class="flex items-center gap-x-3 focus:outline-none">
-                                            <span>Register At</span>
+                                            <span>{{ __('views.list.table.head.register') }}</span>
                                             @if ($sort !== 'register_date')
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"

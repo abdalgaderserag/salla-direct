@@ -53,7 +53,7 @@
                                     <th scope="col"
                                         class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                         <div class="flex items-center gap-x-3">
-                                            <span>Name</span>
+                                            <span>{{ __('views.list.table.head.name') }}</span>
                                         </div>
                                     </th>
 

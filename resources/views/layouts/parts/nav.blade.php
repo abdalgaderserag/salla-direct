@@ -31,14 +31,14 @@
                 <div class="flex flex-col -mx-6 lg:flex-row lg:items-center lg:mx-8">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" type="submit">Logout</button>
+                        <button class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" type="submit">{{ __('views.layout.nav.logout') }}</button>
                     </form>
                     <a href="#"
-                        class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Connected</a>
+                        class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">{{ __('views.layout.nav.connected') }}</a>
                     <a href="#"
-                        class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Topics</a>
+                        class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">{{ __('views.layout.nav.topics') }}</a>
                     <a href="#"
-                        class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Tutorials</a>
+                        class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">{{ __('views.layout.nav.tutorials') }}</a>
                 </div>
 
                 <div class="flex items-center mt-4 lg:mt-0">
@@ -54,8 +54,8 @@
                     <button id="darkModeToggle"
                         class="hidden mx-4 text-gray-600 transition-colors duration-300 transform lg:block dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-400 focus:text-gray-700 dark:focus:text-gray-400 focus:outline-none"
                         aria-label="show notifications">
-                        <img class="w-6 h-6 dark:hidden" src="{{ asset('svg/light-mode.svg') }}" alt="Light Mode SVG">
-                        <img class="w-6 h-6 hidden dark:block" src="{{ asset('svg/dark-mode.svg') }}"
+                        <img class="w-6 h-6 dark:hidden" src="{{ asset(__('views.layout.nav.logo')) }}" alt="Light Mode SVG">
+                        <img class="w-6 h-6 hidden dark:block" src="{{ asset(__('views.layout.nav.logo.dark')) }}"
                             alt="Dark Mode SVG">
                     </button>
 
