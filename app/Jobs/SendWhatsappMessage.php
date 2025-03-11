@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Message;
+use App\Models\Plan;
+use App\Models\Salla\Store;
 use GuzzleHttp\Client;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -46,6 +48,17 @@ class SendWhatsappMessage implements ShouldQueue
                 ]
             ]
         );
+        $holder = $this->message->campaign();
+        if (!empty($holder)) {
+            $store_id= $holder->store_id;
+        }else{
+            $holder = $this->message->auto();
+            $store_id= $holder->store_id;
+        }
 
+        $store = Store::where('store_id',$store_id)->first();
+        $plan = Plan::where('user_id',$store->user_id)->first();
+        $plan->messages_count = $plan->messages_count -1;
+        $plan->update();
     }
 }

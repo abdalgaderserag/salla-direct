@@ -11,12 +11,15 @@ class Message extends Model
     use HasFactory;
 
     protected $fillable =[
-        'campaign_id',
         'context',
         'attachment'
     ];
 
     public function campaign() {
-        return $this->belongsTo(Campaign::class);
+        return $this->hasOne(Campaign::class);
+    }
+
+    public function auto() {
+        return $this->hasOne(Auto::class);
     }
 }

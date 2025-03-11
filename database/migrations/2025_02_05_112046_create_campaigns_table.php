@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('campaigns', function (Blueprint $table) {
             $table->id();
             $table->text('name')->unique();
-            $table->integer('store_id')->unsigned();
+            $table->foreignId('message_id')->constrained()->onDelete('cascade');
+            $table->foreignId('store_id')->constrained()->onDelete('cascade');
             $table->timestamp('activated_at');
             $table->integer('time_lapse')->unsigned();
             $table->json('clients');

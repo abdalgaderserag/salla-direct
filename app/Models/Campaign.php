@@ -13,6 +13,7 @@ class Campaign extends Model
     protected $fillable = [
         'name',
         'store_id',
+        'message_id',
         'clients',
         'activated_at',
         'time_lapse',
@@ -21,6 +22,6 @@ class Campaign extends Model
 
 
     public function message() {
-        return $this->hasOne(Message::class);
+        return $this->belongsTo(Message::class);
     }
 }

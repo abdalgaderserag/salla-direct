@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Salla;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\SendWhatsappMessage;
 use App\Models\Auto;
 use App\Models\Client;
 use App\Models\Message;
+use App\Models\Plan;
 use App\Models\Salla\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -98,13 +98,13 @@ class WebhookController extends Controller
         $auto = Auto::where('store_id', $store->id)
             ->where('event', $event)
             ->first();
-        $client = $store->clients->where('salla_id',$data['customer']['id'])->first();
-        $this->fireMessage($auto->message,$client);
+        $client = $store->clients->where('salla_id', $data['customer']['id'])->first();
+        $this->fireMessage($auto->message, $client);
     }
 
     private function handleOrderUpdated($data, $event, Store $store)
     {
-        $autos = Auto::all()->where('store_id', '=', $store->id)->where('event', '=', $event);
+        $autos = Auto::where('store_id', '=', $store->id)->where('event', '=', $event);
         switch ($data['status']) {
             case 'تم التنفيذ':
                 $auto = $autos->where('type', '=', 'order.completed')->first();
@@ -113,7 +113,7 @@ class WebhookController extends Controller
                 $auto = $autos->where('type', '=', 'refunding.order')->first();
                 break;
         }
-        $client = $store->clients->where('salla_id',$data['customer']['id'])->first();
+        $client = $store->clients->where('salla_id', $data['customer']['id'])->first();
 
         $this->fireMessage($auto->message, $client);
     }
@@ -122,7 +122,7 @@ class WebhookController extends Controller
     {
         $store = Store::where('merchant', $merchant)->first();
 
-        $autos = Auto::all()->where('store_id', '=', $store->id)->where('event', '=', $event);
+        $autos = Auto::where('store_id', '=', $store->id)->where('event', '=', $event);
         switch ($data['status']) {
             case 'payment on arrival confirmation':
                 $auto = $autos->where('type', '=', 'payment-arrival')->first();
@@ -137,6 +137,38 @@ class WebhookController extends Controller
 
     private function fireMessage(Message $message, Client $client)
     {
-        dispatch(new SendWhatsappMessage($message, $client->phone));
+        $receiver = $client->phone;
+        $client = new \GuzzleHttp\Client();
+        $access_token = 'EAAQt7cNZBsFcBOy6IiyDCLPdraZCghCGLZCrEOYGhV4OOavzHWBFAR7RoAzlrAdRY0ZAm4HmHfH8QFe3WBVQcjxvCNH1VbCgZA57wjjiDdFRIOicxX1fNj3gb0qaOlZC0RyLf9qhrsKZAA6IATW7niiPPyh11XS2ejFSYZAHveFhahhu5dF25UVEgoG38WaU6xZAmZCQZDZD';
+        $response = $client->post(
+            "https://graph.facebook.com/v22.0/614741461713399/messages",
+            [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $access_token,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => [
+                    'messaging_product' => 'whatsapp',
+                    'to' => $receiver,
+                    'type' => 'text',
+                    'text' => [
+                        'body' => $message->context,
+                        'preview_url' => true
+                    ]
+                ]
+            ]
+        );
+        $holder = $message->campaign();
+        if (!empty($holder)) {
+            $store_id = $holder->store_id;
+        } else {
+            $holder = $message->auto();
+            $store_id = $holder->store_id;
+        }
+
+        $store = Store::where('store_id', $store_id)->first();
+        $plan = Plan::where('user_id', $store->user_id)->first();
+        $plan->messages_count = $plan->messages_count - 1;
+        $plan->update();
     }
 }
