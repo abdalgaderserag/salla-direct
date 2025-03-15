@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
 
         Store::factory(1)->create([
             'user_id' => $u->id,
+            'merchant' => 21321
         ]);
 
         $events = config('salla.events');

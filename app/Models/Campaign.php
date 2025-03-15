@@ -16,8 +16,6 @@ class Campaign extends Model
         'message_id',
         'clients',
         'activated_at',
-        'time_lapse',
-        'status'
     ];
 
 

@@ -5,6 +5,7 @@ namespace App\Livewire\Client;
 use App\Models\Campaign;
 use App\Models\Client;
 use App\Models\Group;
+use App\Models\Message;
 use App\Models\Salla\SallaAccessToken;
 use App\Salla;
 use Carbon\Carbon;
@@ -14,11 +15,12 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithPagination,WithFileUploads;
     public $selectedClientIds = [];
     public $select_list_input = false, $showClientWindow = false, $campForm = false;
     public $group = '', $search = '', $sort = 'username', $sortDir = 'ASC';
@@ -31,9 +33,11 @@ class Index extends Component
         'phone' => ''
     ];
 
+    public $file;
+
     public $campData = [
         'name' => '',
-        'time' => '',
+        'context' => '',
     ];
 
     #[Computed()]
@@ -125,11 +129,19 @@ class Index extends Component
     }
 
     public function saveCamp() {
+        if ($this->file) {
+            $path = $this->file->store('messages','public');
+        }
+        $message = new Message();
+        $message->context = $this->campData['context'];
+        $message->attachment = json_encode([
+            $path
+        ]);
+        $message->save();
         $campaign = new Campaign();
         $campaign->store_id = Auth::user()->active_id;
+        $campaign->message_id = $message->id;
         $campaign->name = $this->campData['name'];
-        $campaign->time_lapse = $this->campData['time'];
-        $campaign->status = true;
         $campaign->clients = json_encode(Session::get('selected_clients', []));
         $campaign->save();
 

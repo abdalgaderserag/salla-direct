@@ -14,12 +14,10 @@ return new class extends Migration
         Schema::create('campaigns', function (Blueprint $table) {
             $table->id();
             $table->text('name')->unique();
-            $table->foreignId('message_id')->constrained()->onDelete('cascade');
-            $table->foreignId('store_id')->constrained()->onDelete('cascade');
+            $table->integer('message_id',0,1);
+            $table->integer('store_id',0,1);
             $table->timestamp('activated_at');
-            $table->integer('time_lapse')->unsigned();
             $table->json('clients');
-            $table->integer('status')->unsigned();
             $table->timestamps();
         });
     }

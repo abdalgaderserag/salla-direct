@@ -151,14 +151,14 @@
         <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
             wire:click="hideCampForm">
 
-            <section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800" @click.stop>
+            <section class="w-full max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800" @click.stop>
                 <span class="text-lg font-semibold text-gray-700 capitalize dark:text-white">Create Campaign</span>
                 <span
                     class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{{ count(Session::get('selected_clients', [])) }}
                     customer selected</span>
 
                 <form wire:submit.prevent="saveCamp">
-                    <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+                    <div>
 
                         <div>
                             <label class="text-gray-700 dark:text-gray-200" for="name">Campaign Name</label>
@@ -167,11 +167,20 @@
                         </div>
 
                         <div>
-                            <label class="text-gray-700 dark:text-gray-200" for="first_name">time between
-                                messages</label>
-                            <input id="first_name" type="range" min="40" max="120"
-                                wire:model="campData.time"
-                                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                            <label for="image"
+                                class="block text-sm text-gray-500 dark:text-gray-300">Image, Video, PDF and
+                                excel</label>
+
+                            <input wire:model='file' type="file"
+                                class="block w-full px-3 py-2 mt-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg file:bg-gray-200 file:text-gray-700 file:text-sm file:px-4 file:py-1 file:border-none file:rounded-full dark:file:bg-gray-800 dark:file:text-gray-200 dark:text-gray-300 placeholder-gray-400/70 dark:placeholder-gray-500 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-blue-300" />
+                        </div>
+
+                        <div>
+                            <label for="Description" class="block text-sm text-gray-500 dark:text-gray-300">Description</label>
+
+                            <textarea wire:model="campData.context" placeholder="lorem..." class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-4 h-32 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"></textarea>
+
+                            <p class="mt-3 text-xs text-gray-400 dark:text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                         </div>
 
                     </div>
